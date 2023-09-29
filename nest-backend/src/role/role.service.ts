@@ -1,7 +1,4 @@
-import {
-    ForbiddenException,
-    Injectable,
-} from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import {
     CreateRoleDto,
@@ -12,7 +9,7 @@ import {
 export class RoleService {
     constructor(private prisma: PrismaService) { }
 
-    getRoles(roleId: number) {
+    getRoles() {
         return this.prisma.role.findMany({});
     }
 

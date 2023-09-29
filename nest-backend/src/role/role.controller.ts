@@ -26,14 +26,12 @@ export class RoleController {
     ) { }
 
     @Get()
-    getRoles(roleId: number) {
-        return this.roleService.getRoles(
-            roleId,
-        );
+    getRoles() {
+        return this.roleService.getRoles();
     }
 
     @Get(':id')
-    getroleById(
+    getRoleById(
         @Param('id', ParseIntPipe) roleId: number,
     ) {
         return this.roleService.getRoleById(
