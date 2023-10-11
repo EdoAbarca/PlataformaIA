@@ -1,13 +1,12 @@
 import React from "react";
+import { Link } from "react-router-dom";
 
 
 export default function FormAnalysis() {
   return (
     <div className="flex justify-center items-center h-screen">
-      <div className="w-1/3 bg-white p-8 rounded-lg shadow-lg">
+      <div className="w-1/3 bg-white p-8 rounded-lg shadow-2xl transition duration-500 hover:scale-105">
         <h1 className="text-2xl font-semibold text-center mb-6">Realizar análisis</h1>
-
-        <Link to="/" className="block text-blue-500 mb-4">Volver</Link>
 
         <form className="align-items-center">
           <div className="mb-4">
@@ -56,7 +55,8 @@ export default function FormAnalysis() {
             <input type="file" id="fileInput" name="fileInput" className="w-full px-3 py-2 border rounded-md focus:outline-none focus:border-blue-500" />
           </div>
 
-          <button type="submit" className="w-full bg-blue-500 text-white py-2 rounded-md hover:bg-blue-600 transition duration-300 ease-in-out">Realizar análisis</button>
+          <button type="submit" className="w-full bg-blue-500 text-white py-2 rounded-xl hover:bg-blue-600 transition duration-300 ease-in-out">Realizar análisis</button>
+          <button className="w-full py-2 mt-2 shadow-xl rounded-lg border">Volver</button>
         </form>
       </div>
     </div>

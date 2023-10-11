@@ -5,9 +5,11 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "vite build",
+    "build": "build:css && vite build",
     "lint": "eslint . --ext js,jsx --report-unused-disable-directives --max-warnings 0",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "build:css": "postcss src/styles/index.css -o src/styles/tailwind.css",
+    "watch:css": "postcss src/styles/index.css -o src/styles/tailwind.css -w"
   },
   "dependencies": {
     "localforage": "^1.10.0",

@@ -1,4 +1,5 @@
 import React from "react";
+import { Link, Navigate } from "react-router-dom";
 
 function NotFound() {
   return (
@@ -10,7 +11,7 @@ function NotFound() {
             <h1 class="text-6xl font-medium py-8">No encontrado.</h1>
             <p class="text-2xl pb-8 px-12 font-medium">¡Ups! La página solicitada no existe.</p>
             <button class="bg-gradient-to-r from-purple-400 to-blue-500 hover:from-pink-500 hover:to-orange-500 text-white font-semibold px-6 py-3 rounded-md mr-6">
-              Home
+              <Link to="/">Home</Link>
             </button>
             <button class="bg-gradient-to-r from-red-400 to-red-500 hover:from-red-500 hover:to-red-500 text-white font-semibold px-6 py-3 rounded-md">
               Volver
