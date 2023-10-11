@@ -1,87 +1,108 @@
-import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
-function Navbar() {
-  const [isOpen, setIsOpen] = useState(false);
+import { useState, useRef, useEffect } from "react"
+import HamburguesaMenu from "./HamburguesaMenu"
 
-  return (
-    <nav className="flex items-center justify-between flex-wrap p-6">
-      <div className="block lg:hidden">
-        <button
-          onClick={() => setIsOpen(!isOpen)}
-          className="flex items-center px-3 py-2 rounded text-black-500 hover:text-black-400"
-        >
-          <svg
-            className={`fill-current h-3 w-3 ${isOpen ? "hidden" : "block"}`}
-            viewBox="0 0 20 20"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path d="M0 3h20v2H0V3zm0 6h20v2H0V9zm0 6h20v2H0v-2z" />
-          </svg>
-          <svg
-            className={`fill-current h-3 w-3 ${isOpen ? "block" : "hidden"}`}
-            viewBox="0 0 20 20"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path d="M10 8.586L2.929 1.515 1.515 2.929 8.586 10l-7.071 7.071 1.414 1.414L10 11.414l7.071 7.071 1.414-1.414L11.414 10l7.071-7.071-1.414-1.414L10 8.586z" />
-          </svg>
-        </button>
-      </div>
-      <div
-        className={`w-full block flex-grow lg:flex lg:items-center lg:w-auto ${isOpen ? "block" : "hidden"}`}
-      >
-        <div className="text-sm lg:flex-grow">
-          <Link to="/" className="block mt-4 lg:inline-block lg:mt-0 text-white-200 mr-4">
-            Home
-          </Link>
-          <Link to="/register" className="block mt-4 lg:inline-block lg:mt-0 text-white-200 mr-4">
-            Register
-          </Link>
-          <Link to="/login" className="block mt-4 lg:inline-block lg:mt-0 text-white-200 mr-4">
-            Login
-          </Link>
-          <Link to="/loggedin" className="block mt-4 lg:inline-block lg:mt-0 text-white-200 mr-4">
-            After login
-          </Link>
-          <Link to="/analysis-form" className="block mt-4 lg:inline-block lg:mt-0 text-white-200 mr-4">
-            Analysis form
-          </Link>
-          <Link to="/keys" className="block mt-4 lg:inline-block lg:mt-0 text-white-200 mr-4">
-            Keys
-          </Link>
-          <Link to="/analysis" className="block mt-4 lg:inline-block lg:mt-0 text-white-200 mr-4">
-            Analysis
-          </Link>
+// Profile Dropdown
+const ProfileDropDown = (props) => {
+
+    const [state, setState] = useState(false)
+    const profileRef = useRef()
+
+    const navigation = [
+        { title: "Dashboard", path: "javascript:void(0)" },
+        { title: "Settings", path: "javascript:void(0)" },
+        { title: "Log out", path: "javascript:void(0)" },
+    ]
+
+    
+    useEffect(() => {
+        const handleDropDown = (e) => {
+            if (!profileRef.current.contains(e.target)) setState(false)
+        }
+        document.addEventListener('click', handleDropDown)
+    }, [])
+
+    return (
+        <div className={`relative ${props.class}`}>
+            <div className="flex items-center space-x-4">
+                <button ref={profileRef} className="w-10 h-10 outline-none rounded-full ring-offset-2 ring-gray-200 ring-2 lg:focus:ring-indigo-600"
+                    onClick={() => setState(!state)}
+                >
+                    <img
+                        src="https://randomuser.me/api/portraits/men/46.jpg"
+                        className="w-full h-full rounded-full"
+                    />
+                </button>
+                <div className="lg:hidden">
+                    <span className="block">Micheal John</span>
+                    <span className="block text-sm text-gray-500">john@gmail.com</span>
+                </div>
+            </div>
+            <ul className={`bg-white top-12 right-0 mt-5 space-y-5 lg:absolute lg:border lg:rounded-md lg:text-sm lg:w-52 lg:shadow-md lg:space-y-0 lg:mt-0 ${state ? '' : 'lg:hidden'}`}>
+                {
+                    navigation.map((item, idx) => (
+                        <li>
+                            <a key={idx} className="block text-gray-600 lg:hover:bg-gray-50 lg:p-2.5" href={item.path}>
+                                {item.title}
+                            </a>
+                        </li>
+                    ))
+                }
+            </ul>
         </div>
-
-        <button id="dropdownInformationButton" data-dropdown-toggle="dropdownInformation" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" type="button">Dropdown header <svg class="w-2.5 h-2.5 ml-2.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
-          <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4" />
-        </svg>
-        </button>
-
-
-        <div id="dropdownInformation" class="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700 dark:divide-gray-600">
-          <div class="px-4 py-3 text-sm text-gray-900 dark:text-white">
-            <div>Bonnie Green</div>
-            <div class="font-medium truncate">name@flowbite.com</div>
-          </div>
-          <ul class="py-2 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdownInformationButton">
-            <li>
-              <a href="#" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Dashboard</a>
-            </li>
-            <li>
-              <a href="#" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Settings</a>
-            </li>
-            <li>
-              <a href="#" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Earnings</a>
-            </li>
-          </ul>
-          <div class="py-2">
-            <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">Sign out</a>
-          </div>
-        </div>
-
-      </div>
-    </nav>
-  );
+    )
 }
-export default Navbar;
+
+export default () => {
+
+    const [menuState, setMenuState] = useState(false)
+
+  // Replace javascript:void(0) path with your path
+  const navigation = [
+      { title: "Customers", path: "javascript:void(0)" },
+      { title: "Careers", path: "javascript:void(0)" },
+      { title: "Guides", path: "javascript:void(0)" },
+      { title: "Partners", path: "javascript:void(0)" },
+  ]
+    return (
+        <nav className="bg-white border-b">
+            <div className="flex items-center space-x-8 py-3 px-4 max-w-screen-xl mx-auto md:px-8">
+                <div className="flex-none lg:flex-initial">
+                    <a href="javascript:void(0)">
+                        <h1>PoC AID</h1>
+                    </a>
+                </div>
+                <div className="flex-1 flex items-center justify-between">
+                    <div className={`bg-white absolute z-20 w-full top-16 left-0 p-4 border-b lg:static lg:block lg:border-none ${menuState ? '' : 'hidden'}`}>
+                        <ul className="mt-12 space-y-5 lg:flex lg:space-x-6 lg:space-y-0 lg:mt-0">
+                            {
+                                navigation.map((item, idx) => (
+                                    <li key={idx} className="text-gray-600 hover:text-gray-900">
+                                        <a href={item.path}>
+                                            {item.title}
+                                        </a>
+                                    </li>
+                                ))
+                            }
+                        </ul>
+                        <ProfileDropDown 
+                            class="mt-5 pt-5 border-t lg:hidden"
+                        />
+                    </div>
+                    <div className="flex-1 flex items-center justify-end space-x-2 sm:space-x-6">
+                    <HamburguesaMenu/>
+                        <ProfileDropDown 
+                            class="hidden lg:block"
+                        />
+                        
+                        <button 
+                            className="outline-none text-gray-400 block lg:hidden"
+                            onClick={() => setMenuState(!menuState)}
+                        >
+
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </nav>
+    )
+}

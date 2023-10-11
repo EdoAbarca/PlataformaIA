@@ -5,25 +5,58 @@ import { Link } from "react-router-dom";
 function Home() {
   return (
     <div>
-      <div id="hero-section">
-        <img src={homeImg} alt="homeImg" />
-        <h1>No quieres esto, ¿Verdad?</h1>
-        <p>El uso de IA para resolver evaluaciones es un hecho, mas no tiene porqué ser un problema</p>
+
+      <div className="relative flex flex-col py-16 lg:pt-0 lg:flex-col lg:pb-0">
+        <div className="border-y border-r-2 flex flex-col items-start w-full max-w-xl px-4 mx-auto lg:px-8 lg:max-w-screen-xl">
+          <div className="mb-16 lg:my-40 lg:max-w-lg lg:pr-5">
+            <div className="max-w-xl mb-6">
+              <div>
+                <p className="inline-block px-3 py-px mb-4 text-xs font-semibold tracking-wider text-white uppercase rounded-full bg-red-500">
+                  Prueba de concepto (Alpha)
+                </p>
+              </div>
+              <h2 className="max-w-lg mb-6 font-sans text-4xl font-bold tracking-tight text-gray-900 sm:text-4xl sm:leading-none">
+                No quieres esto, ¿Verdad?
+              </h2>
+              <p className="text-base text-justify text-gray-700 md:text-lg">
+                PoC AI Detector nace como prueba de concepto de un integrador múltiple de detectores de inteligencia artificial, cuyo propósito es revelar si tus alumnos utilizaron estas para resolver tus evaluaciones, sin mayor esfuerzo y con evidencia de por medio.
+              </p>
+            </div>
+            <div className="flex flex-col items-center md:flex-row">
+              <button
+                href="/"
+                className="inline-flex items-center justify-center w-full h-12 px-6 mb-3 font-medium tracking-wide text-white transition duration-500 rounded-2xl shadow-md md:w-auto md:mr-4 md:mb-0 bg-sky-300 hover:bg-sky-500 focus:shadow-outline focus:outline-none"
+              >
+                Entrar ahora
+              </button>
+              <button
+                href="/"
+                aria-label=""
+                className="inline-flex items-center font-semibold text-gray-800 transition-colors duration-200 hover:text-deep-purple-accent-700"
+              >
+                Saber más
+              </button>
+            </div>
+          </div>
+        </div>
+        <div className="border inset-y-0 right-0 w-full max-w-xl px-4 mx-auto lg:pl-8 lg:pr-0 lg:mb-0 lg:mx-0 lg:w-1/2 lg:max-w-full lg:absolute xl:px-0">
+          <img
+            className="object-cover w-full h-56 rounded shadow-lg lg:rounded-none lg:shadow-none sm:h-96 lg:h-full"
+            src={homeImg}
+            alt=""
+          />
+        </div>
       </div>
-      <div id="why">
-        <h1></h1>
-        <p>PoC AI Detector nace como prueba de concepto de un integrador múltiple de detectores de IA, el que evidenciará si tus alumnos utilizaron IA para resolver sus evaluaciones, sin mayor esfuerzo y con evidencia de por medio</p>
-      </div>
-      <section className="w-full py-12 md:py-24 lg:py-32 xl:py-48 bg-black">
+      <section className="w-full py-6 md:py-12 lg:py-16 xl:py-24 bg-black">
         <div className="container px-4 md:px-6">
           <div className="grid gap-6 items-center">
             <div className="flex flex-col justify-center space-y-8 text-center">
               <div className="space-y-2">
                 <h1 className="text-3xl font-bold tracking-tighter sm:text-5xl xl:text-6xl/none bg-clip-text text-transparent bg-gradient-to-r from-white to-gray-500">
-                  Discover Our Unique Features
+                  El uso de IA para resolver evaluaciones es un hecho, mas no tiene por qué ser un problema
                 </h1>
-                <p className="max-w-[600px] text-zinc-200 md:text-xl dark:text-zinc-100 mx-auto">
-                  Our features are designed to enhance your productivity and streamline your workflow.
+                <p className="max-w-[720px] text-zinc-200 md:text-xl dark:text-zinc-100 mx-auto p-10">
+                  Este servicio no es un sustituto de tu criterio, pero sí una herramienta de referencia que te ayudará a detectar posibles casos de engaño.
                 </p>
               </div>
               <div className="w-full max-w-full space-y-4 mx-auto">
@@ -176,40 +209,26 @@ function Home() {
           </div>
         </div>
       </section>
-      <section className="w-full h-screen py-12 md:py-24 lg:py-32 xl:py-48 bg-black">
-      <div className="container px-4 md:px-6">
-        <div className="grid gap-6 items-center">
-          <div className="flex flex-col justify-center space-y-4 text-center">
-            <div className="space-y-2">
-              <h1 className="text-3xl font-bold tracking-tighter sm:text-5xl xl:text-6xl/none bg-clip-text text-transparent bg-gradient-to-r from-white to-gray-500">
-                Revolutionize Your Email Experience
-              </h1>
-              <p className="max-w-[600px] text-zinc-200 md:text-xl dark:text-zinc-100 mx-auto">
-                Join us and take control of your inbox. Fast, secure, and designed for modern life.
-              </p>
-            </div>
-            <div className="w-full max-w-sm space-y-2 mx-auto">
-              <form className="flex space-x-2">
-                <input
-                  className="max-w-lg flex-1 bg-gray-800 text-white border-gray-900"
-                  placeholder="Enter your email"
-                  type="email"
-                />
-                <button className="bg-white text-black" type="submit">
-                  Join Now
-                </button>
-              </form>
-              <p className="text-xs text-zinc-200 dark:text-zinc-100">
-                Get ready to redefine your email experience.
-                <Link className="underline underline-offset-2 text-white" href="#">
-                  Terms & Conditions
-                </Link>
-              </p>
+      <section className="w-full h-screen py-6 md:py-12 lg:py-16 xl:py-32 bg-black">
+        <div className="container px-4 md:px-6">
+          <div className="grid gap-6 items-center">
+            <div className="flex flex-col justify-center space-y-4 text-center">
+              <div className="space-y-2">
+                <h1 className="text-3xl font-bold tracking-tighter sm:text-5xl xl:text-6xl/none bg-clip-text text-transparent bg-gradient-to-r from-white to-gray-500 py-4">
+                  Únete a la revolución de las inteligencias artificiales
+                </h1>
+                <button className="justify-center border-white text-white text-lg font-semibold transition duration-500 hover:text-black hover:bg-white rounded-3xl m-4 py-4 px-16">Registrarse</button>
+              </div>
+              <div className="space-y-2">
+                <h1 className="text-3xl font-bold tracking-tighter sm:text-5xl xl:text-6xl/none bg-clip-text text-transparent bg-gradient-to-r from-white to-gray-500 py-4">
+                  ¿Ya tienes una cuenta? Inicia sesión
+                </h1>
+                <button className="justify-center border-white text-white text-lg font-semibold transition duration-500 hover:text-black hover:bg-white rounded-3xl m-4 py-4 px-16">Iniciar sesión</button>
+              </div>
             </div>
           </div>
         </div>
-      </div>
-    </section>
+      </section>
     </div>
   );
 }

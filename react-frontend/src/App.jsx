@@ -7,7 +7,7 @@ import Analysis from './views/Analysis.jsx'
 import FormAnalysis from './views/FormAnalysis.jsx'
 import Keys from './views/Keys.jsx'
 import NotFound from './views/NotFound.jsx'
-import Navbar from './components/Navbar.jsx';
+import ProfileDropDown from './components/Navbar.jsx';
 import FAQ from './views/FAQ.jsx'
 
 
@@ -17,7 +17,7 @@ function App() {
     <div>
 
       <Router>
-        <Navbar />
+        <ProfileDropDown />
         <Routes>
           <Route path='/' element={<Home />} />
           <Route path='/login' element={<Login />} />
