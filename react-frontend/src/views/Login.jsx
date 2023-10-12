@@ -1,28 +1,83 @@
-import React from "react";
+import React, { useState } from "react";
+import { useNavigate, Link} from "react-router-dom";
 
 function Login() {
+  const navigate = useNavigate();
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    console.log(email, password);
+    /*
+    try {
+      const response = await fetch("http://localhost:3333/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ email, password })
+      });
+      const data = await response.json();
+      console.log(data);
+    } catch (error) {
+      console.error(error);
+    }
+    */
+  };
+
   return (
     <div>
       <div className="flex flex-col items-center justify-center h-screen">
         <div className="w-full max-w-md bg-white rounded-lg shadow-md p-6">
           <h2 className="text-2xl font-bold text-gray-900 mb-4">Inicio de sesión</h2>
-          <form className="flex flex-col">
-            <input type="email" className="bg-gray-100 text-gray-900 border-0 rounded-md p-2 mb-4 focus:bg-gray-200 focus:outline-none focus:ring-1 focus:ring-blue-500 transition ease-in-out duration-150" placeholder="Correo electrónico" />
-            <input type="password" className="bg-gray-100 text-gray-900 border-0 rounded-md p-2 mb-4 focus:bg-gray-200 focus:outline-none focus:ring-1 focus:ring-blue-500 transition ease-in-out duration-150" placeholder="Contraseña" />
+          <form className="flex flex-col" onSubmit={handleSubmit}>
+            <input
+              type="email"
+              className="bg-gray-100 text-gray-900 border-0 rounded-md p-2 mb-4 focus:bg-gray-200 focus:outline-none focus:ring-1 focus:ring-blue-500 transition ease-in-out duration-150"
+              placeholder="Correo electrónico"
+              value={email}
+              onChange={(event) => setEmail(event.target.value)}
+            />
+            <input
+              type="password"
+              className="bg-gray-100 text-gray-900 border-0 rounded-md p-2 mb-4 focus:bg-gray-200 focus:outline-none focus:ring-1 focus:ring-blue-500 transition ease-in-out duration-150"
+              placeholder="Contraseña"
+              value={password}
+              onChange={(event) => setPassword(event.target.value)}
+            />
             <div className="flex items-center justify-between flex-wrap">
               <label htmlFor="remember-me" className="text-sm text-gray-900 cursor-pointer">
-                <input type="checkbox" id="remember-me" className="mr-2"/>Recordarme
+                <input type="checkbox" id="remember-me" className="mr-2" />Recordarme
               </label>
-              <a href="#" className="text-sm text-blue-500 hover:underline mb-0.5">¿Olvidaste tu contraseña?</a>
-              <p className="text-gray-900 mt-4"> ¿No tienes cuenta? <a href="#" className="text-sm text-blue-500 -200 hover:underline mt-4">Registrarse</a></p>
+              <a href="#" className="text-sm text-blue-500 hover:underline mb-0.5">
+                ¿Olvidaste tu contraseña?
+              </a>
+              <p className="text-gray-900 mt-4">
+                {" "}
+                ¿No tienes cuenta?{" "}
+                <Link to="/register" className="text-sm text-blue-500 -200 hover:underline">
+                  Registrarse
+                </Link>
+              </p>
             </div>
-            <button type="submit" className="bg-gradient-to-r from-indigo-500 to-blue-500 text-white font-bold py-2 px-4 rounded-md mt-4 hover:bg-indigo-600 hover:to-blue-600 transition ease-in-out duration-150">Entrar</button>
-            <button className="text-black py-2 px-4 mt-4 rounded-md shadow-md">Volver</button>
+            <button
+              type="submit"
+              className="bg-gradient-to-r from-indigo-500 to-blue-500 text-white font-bold py-2 px-4 rounded-xl mt-4 hover:bg-indigo-600 hover:to-blue-600 transition ease-in-out duration-150"
+            >
+              Entrar
+            </button>
+            <Link
+              to={"/"}
+              className="text-black py-2 px-4 mt-4 rounded-xl shadow-md text-center font-semibold"
+            >
+              Volver
+            </Link>
           </form>
         </div>
       </div>
     </div>
-    );
+  );
 }
 
 export default Login;

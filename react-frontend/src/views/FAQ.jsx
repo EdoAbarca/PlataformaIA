@@ -7,9 +7,9 @@ export default function FAQ() {
       <div class="mx-auto px-5">
         <div class="flex flex-col items-center">
           <h2 class="mt-5 text-center text-3xl font-bold tracking-tight md:text-5xl">FAQ</h2>
-          <p class="mt-3 text-lg text-neutral-500 md:text-xl">Frequenty asked questions
-
-          </p>
+          <p class="mt-3 text-lg text-neutral-500 md:text-xl">Frequenty asked questions</p>
+          <button class="mt-4 text-center font-semibold px-5 py-2 border rounded-2xl">Volver</button>
+          
         </div>
         <div class="mx-auto mt-8 grid max-w-xl divide-y divide-neutral-200">
           <div class="py-5">

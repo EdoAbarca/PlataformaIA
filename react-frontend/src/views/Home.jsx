@@ -217,14 +217,20 @@ function Home() {
                 <h1 className="text-3xl font-bold tracking-tighter sm:text-5xl xl:text-6xl/none bg-clip-text text-transparent bg-gradient-to-r from-white to-gray-500 py-4">
                   Únete a la revolución de las inteligencias artificiales
                 </h1>
-                <button className="justify-center border-white text-white text-lg font-semibold transition duration-500 hover:text-black hover:bg-white rounded-3xl m-4 py-4 px-16">Registrarse</button>
-              </div>
+                <Link to="/register">
+                  <button className="justify-center border-white text-white text-lg font-semibold transition duration-500 hover:text-black hover:bg-white rounded-3xl m-4 py-4 px-16">
+                    Registrarse
+                  </button>
+                </Link></div>
               <div className="space-y-2">
                 <h1 className="text-3xl font-bold tracking-tighter sm:text-5xl xl:text-6xl/none bg-clip-text text-transparent bg-gradient-to-r from-white to-gray-500 py-4">
                   ¿Ya tienes una cuenta? Inicia sesión
                 </h1>
-                <button className="justify-center border-white text-white text-lg font-semibold transition duration-500 hover:text-black hover:bg-white rounded-3xl m-4 py-4 px-16">Iniciar sesión</button>
-              </div>
+                <Link to="/login">
+                  <button className="justify-center border-white text-white text-lg font-semibold transition duration-500 hover:text-black hover:bg-white rounded-3xl m-4 py-4 px-16">
+                    Iniciar sesión
+                  </button>
+                </Link></div>
             </div>
           </div>
         </div>

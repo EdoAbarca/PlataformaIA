@@ -4,7 +4,7 @@ function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
-    <nav className="flex items-center justify-between flex-wrap p-6">
+    <nav className="flex items-center justify-between flex-wrap p-6 bg-black">
       <div className="block lg:hidden">
         <button
           onClick={() => setIsOpen(!isOpen)}
@@ -30,56 +30,78 @@ function Navbar() {
         className={`w-full block flex-grow lg:flex lg:items-center lg:w-auto ${isOpen ? "block" : "hidden"}`}
       >
         <div className="text-sm lg:flex-grow">
-          <Link to="/" className="block mt-4 lg:inline-block lg:mt-0 text-white-200 mr-4">
+          <Link to="/" className="block text-lg mt-4 lg:inline-block lg:mt-0 text-white font-bold mr-4">
             Home
           </Link>
-          <Link to="/register" className="block mt-4 lg:inline-block lg:mt-0 text-white-200 mr-4">
+          <Link to="/register" className="block mt-4 lg:inline-block lg:mt-0 text-white font-semibold mr-4">
             Register
           </Link>
-          <Link to="/login" className="block mt-4 lg:inline-block lg:mt-0 text-white-200 mr-4">
+          <Link to="/login" className="block mt-4 lg:inline-block lg:mt-0 text-white font-semibold mr-4">
             Login
           </Link>
-          <Link to="/loggedin" className="block mt-4 lg:inline-block lg:mt-0 text-white-200 mr-4">
+          <Link to="/loggedin" className="block mt-4 lg:inline-block lg:mt-0 text-white font-semibold mr-4">
             After login
           </Link>
-          <Link to="/analysis-form" className="block mt-4 lg:inline-block lg:mt-0 text-white-200 mr-4">
+          <Link to="/analysis-form" className="block mt-4 lg:inline-block lg:mt-0 text-white font-semibold mr-4">
             Analysis form
           </Link>
-          <Link to="/keys" className="block mt-4 lg:inline-block lg:mt-0 text-white-200 mr-4">
+          <Link to="/keys" className="block mt-4 lg:inline-block lg:mt-0 text-white font-semibold mr-4">
             Keys
           </Link>
-          <Link to="/analysis" className="block mt-4 lg:inline-block lg:mt-0 text-white-200 mr-4">
+          <Link to="/analysis" className="block mt-4 lg:inline-block lg:mt-0 text-white font-semibold mr-4">
             Analysis
           </Link>
         </div>
-
-        <button id="dropdownInformationButton" data-dropdown-toggle="dropdownInformation" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" type="button">Dropdown header <svg class="w-2.5 h-2.5 ml-2.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
-          <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4" />
-        </svg>
-        </button>
-
-
-        <div id="dropdownInformation" class="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700 dark:divide-gray-600">
-          <div class="px-4 py-3 text-sm text-gray-900 dark:text-white">
-            <div>Bonnie Green</div>
-            <div class="font-medium truncate">name@flowbite.com</div>
-          </div>
-          <ul class="py-2 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdownInformationButton">
-            <li>
-              <a href="#" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Dashboard</a>
-            </li>
-            <li>
-              <a href="#" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Settings</a>
-            </li>
-            <li>
-              <a href="#" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Earnings</a>
-            </li>
-          </ul>
-          <div class="py-2">
-            <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">Sign out</a>
-          </div>
+        <div className="relative">
+          <button
+            onClick={() => setIsOpen(!isOpen)}
+            className="flex items-center justify-center h-10 w-10 rounded-full bg-gray-300 hover:bg-gray-400 focus:outline-none focus:shadow-outline"
+          >
+            <svg
+              className="h-6 w-6 text-gray-700"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M12 14c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4z"
+              />
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M21 21v-2a4 4 0 00-4-4H7a4 4 0 00-4 4v2"
+              />
+            </svg>
+          </button>
+          {isOpen && (
+            <div className="absolute right-0 mt-2 py-2 w-64 bg-white rounded-lg shadow-xl">
+              <p
+                className="block px-4 py-2 text-gray-800"
+              >
+                Username
+              </p>
+              <p
+                className="block px-4 py-2 text-gray-800"
+              >
+                Email
+              </p>
+              <p
+                className="block px-4 py-2 text-gray-800"
+              >
+                Role
+              </p>
+              <p
+                className="block px-4 py-2 text-gray-800 hover:bg-red-500 hover:text-white"
+              >
+                Sign out
+              </p>
+            </div>
+          )}
         </div>
-
       </div>
     </nav>
   );
