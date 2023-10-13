@@ -1,14 +1,32 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faListUl } from "@fortawesome/free-solid-svg-icons";
 
 function Keys() {
-  const [showMenu, setShowMenu] = useState(false);
+  const [keys, setKeys] = useState(null);
 
-  const handleMenuClick = () => {
-    setShowMenu(!showMenu);
+  useEffect(() => {
+    async function fetchKeys() {
+      try {
+        const response = await fetch("http://localhost:3333/alpha/final/keys");
+        const data = await response.json();
+        setKeys(data);
+        console.log(data);
+      } catch (error) {
+        console.log(error);
+      }
+    }
+
+    fetchKeys();
+  }, []);
+
+  const handleMenuClick = (index) => {
+    const newKeys = [...keys];
+    newKeys[index].showMenu = !newKeys[index].showMenu;
+    setKeys(newKeys);
   };
+
   return (
     <div>
       <div className="w-full sm:px-6">
@@ -19,7 +37,7 @@ function Keys() {
               <button className="rounded-xl mt-4 mx-4 px-6 py-3 bg-gradient-to-r from-indigo-500 to-blue-500 sm:mt-0">
                 <p className="text-sm font-medium leading-none text-white">Agregar</p>
               </button>
-              <Link to={"/"}>
+              <Link to={"/loggedin"}>
                 <button className="border rounded-xl mt-4 px-6 py-3 sm:mt-0">
                   <p className="text-sm font-medium leading-none">Volver</p>
                 </button>
@@ -44,27 +62,29 @@ function Keys() {
                 </tr>
               </thead>
               <tbody>
-                <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
-                  <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                    Código 1
-                  </th>
-                  <td className="px-6 py-4">
-                    IA 1
-                  </td>
-                  <td className="px-6 py-4 text-right">
-                    <div className="relative">
-                      <button onClick={handleMenuClick} className="text-white font-bold bg-blue-600 dark:bg-blue-500 hover:bg-blue-700 rounded-full px-3 py-2">
-                        <FontAwesomeIcon icon={faListUl} beat/>
-                      </button>
-                      {showMenu && (
-                        <div className="fixed right-0 mt-2 w-auto bg-white rounded-md overflow-hidden shadow-xl z-10">
-                          <button className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900">Editar</button>
-                          <button className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900">Eliminar</button>
-                        </div>
-                      )}
-                    </div>
-                  </td>
-                </tr>
+                {keys && keys.map((item, index) => (
+                  <tr key={item.id} className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
+                    <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                      {item.ai_key}
+                    </th>
+                    <td className="px-6 py-4">
+                      {item.ai.name}
+                    </td>
+                    <td className="px-6 py-4 text-right">
+                      <div className="relative">
+                        <button onClick={() => handleMenuClick(index)} className="text-white font-bold bg-blue-600 dark:bg-blue-500 hover:bg-blue-700 rounded-full px-3 py-2">
+                          <FontAwesomeIcon icon={faListUl} beat/>
+                        </button>
+                        {item.showMenu && (
+                          <div className="fixed right-0 mt-2 w-auto bg-white rounded-md overflow-hidden shadow-xl z-10">
+                            <button className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900">Editar</button>
+                            <button className="block px-4 py-2 text-sm text-gray-700 hover:bg-red-500 hover:text-gray-900">Eliminar</button>
+                          </div>
+                        )}
+                      </div>
+                    </td>
+                  </tr>
+                ))}
               </tbody>
             </table>
           </div>

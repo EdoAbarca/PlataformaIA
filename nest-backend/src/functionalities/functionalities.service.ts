@@ -71,5 +71,6 @@ export class FunctionalitiesService {
 
         return analysis;
     }*/
-    
+ 
+    //Funcionalidades temporales (sin login de usuario)
 }

@@ -15,10 +15,6 @@ export class EditResultDto{
 
     @IsInt()
     @IsOptional()
-    analysis_id: number;
-
-    @IsInt()
-    @IsOptional()
     ai_id: number;
 
     @IsInt()

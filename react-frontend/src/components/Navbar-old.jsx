@@ -42,14 +42,8 @@ function Navbar() {
           <Link to="/loggedin" className="block mt-4 lg:inline-block lg:mt-0 text-white font-semibold mr-4">
             After login
           </Link>
-          <Link to="/analysis-form" className="block mt-4 lg:inline-block lg:mt-0 text-white font-semibold mr-4">
-            Analysis form
-          </Link>
-          <Link to="/keys" className="block mt-4 lg:inline-block lg:mt-0 text-white font-semibold mr-4">
-            Keys
-          </Link>
-          <Link to="/analysis" className="block mt-4 lg:inline-block lg:mt-0 text-white font-semibold mr-4">
-            Analysis
+          <Link to="/faq" className="block mt-4 lg:inline-block lg:mt-0 text-white font-semibold mr-4">
+            FAQ
           </Link>
         </div>
         <div className="relative">

@@ -11,59 +11,59 @@ datasource db {
 }
 
 model Role {
-  id      Int      @id @default(autoincrement())
-  name    String   @unique
+  id   Int    @id @default(autoincrement())
+  name String @unique
   @@map("roles")
 }
 
 model AI {
   id      Int      @id @default(autoincrement())
-  name    String   @unique
-  keys     Key[]
+  name    String   
+  keys    Key[]
   results Result[]
 
   @@map("ais")
 }
 
 model Key {
-  id      Int    @id @default(autoincrement())
-  ai_key  String  
-  ai      AI     @relation(fields: [ai_id], references: [id], onDelete: Cascade)
-  ai_id   Int    
+  id     Int    @id @default(autoincrement())
+  ai_key String
+  ai     AI     @relation(fields: [ai_id], references: [id], onDelete: Cascade)
+  ai_id  Int
 
   @@map("keys")
 }
 
+model Analysis {
+  id        Int        @id @default(autoincrement())
+  created   DateTime   @default(now()) @db.Date
+  title     String
+  documents Document[]
+
+  @@map("analysis")
+}
+
 model Document {
-  id      Int      @id @default(autoincrement())
-  title   String
-  results Result[]
+  id          Int      @id @default(autoincrement())
+  title       String
+  results     Result[]
+  analysis    Analysis @relation(fields: [analysis_id], references: [id], onDelete: Cascade)
+  analysis_id Int
 
   //file File
   @@map("documents")
 }
 
-model Analysis {
-  id             Int         @id @default(autoincrement())
-  created        DateTime    @default(now())
-  title          String      
-  results        Result[]
-
-  @@map("analysis")
-}
-
 model Result {
-  id          Int      @id @default(autoincrement())
-  created     DateTime @default(now())
-  ia_score    Int
-  ia_result   String
+  id        Int      @id @default(autoincrement())
+  created   DateTime @default(now())
+  ia_score  Int
+  ia_result String
 
-  analysis    Analysis @relation(fields: [analysis_id], references: [id], onDelete: Cascade)
-  analysis_id Int      
   ai          AI       @relation(fields: [ai_id], references: [id], onDelete: Cascade)
-  ai_id       Int      
+  ai_id       Int
   document    Document @relation(fields: [document_id], references: [id], onDelete: Cascade)
-  document_id Int      
+  document_id Int
 
   @@map("results")
 }

@@ -99,7 +99,7 @@ export default function FormAnalysis() {
                 onChange={handleInputChange}
               />
               <label htmlFor="ai1" className="ml-2">
-                IA 1
+                PoC AI
               </label>
             </div>
             <div>
@@ -112,7 +112,7 @@ export default function FormAnalysis() {
                 onChange={handleInputChange}
               />
               <label htmlFor="ai2" className="ml-2">
-                IA 2
+                CopyLeaks
               </label>
             </div>
             <div>
@@ -125,7 +125,7 @@ export default function FormAnalysis() {
                 onChange={handleInputChange}
               />
               <label htmlFor="ai3" className="ml-2">
-                IA 3
+                Originality
               </label>
             </div>
           </div>

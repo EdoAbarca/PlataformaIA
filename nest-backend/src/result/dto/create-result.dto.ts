@@ -15,10 +15,6 @@ export class CreateResultDto {
 
     @IsInt()
     @IsNotEmpty()
-    analysis_id: number;
-
-    @IsInt()
-    @IsNotEmpty()
     ai_id: number;
 
     @IsInt()

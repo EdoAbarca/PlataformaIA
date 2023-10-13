@@ -11,6 +11,7 @@ import { DocumentModule } from './document/document.module';
 import { AnalysisModule } from './analysis/analysis.module';
 import { ResultModule } from './result/result.module';
 import { FunctionalitiesModule } from './functionalities/functionalities.module';
+import { AlphaModule } from './alpha/alpha.module';
 
 @Module({
   imports: [
@@ -27,6 +28,7 @@ import { FunctionalitiesModule } from './functionalities/functionalities.module'
     AnalysisModule,
     ResultModule,
     FunctionalitiesModule,
+    AlphaModule,
   ],
 })
 export class AppModule {}
