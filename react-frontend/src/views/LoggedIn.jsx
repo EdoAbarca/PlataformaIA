@@ -1,16 +1,14 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
+import HoverText from "../components/HoverText.jsx";
 
 function returnGuest() {
   return "Usuario de prueba";
 }
 
-function returnGuestLargo() {
-  return "ksfhasjkhfsjahfkjsahgvasjhgjkashgkjssfsagfagaagfagaf";
-}
-
 function LoggedIn() {
   const [analysis, setAnalysis] = useState(null);
+  //const [showText, setShowText] = useState(false);
 
   useEffect(() => {
     async function fetchAnalysis() {
@@ -27,11 +25,24 @@ function LoggedIn() {
     fetchAnalysis();
   }, []);
 
+  async function handleDocumentDelete(id) {
+    try {
+      const response = await fetch(`http://localhost:3333/alpha/final/analysis/${id}`, {
+        method: "DELETE"
+      });
+      const data = await response.json();
+      console.log(data);
+      // Remove the deleted analysis from the state
+      setAnalysis(analysis.filter(item => item.id !== id));
+    } catch (error) {
+      console.log(error);
+    }
+  }
 
   return (
     <div className="mx-6">
       <div className="mx-auto flex max-w-screen-sm items-center justify-center">
-        <div className="h-36 w-full rounded-full bg-gradient-to-r from-pink-500 via-red-500 to-yellow-500 p-1 ">
+        <div className="h-32 w-full rounded-full bg-gradient-to-r from-pink-500 via-red-500 to-yellow-500 p-1 ">
           <div className="flex h-full w-full items-center justify-center bg-gray-800 rounded-full">
             <h1 className="text-2xl font-bold text-white">Bienvenido, {returnGuest()}</h1>
           </div>
@@ -39,14 +50,17 @@ function LoggedIn() {
       </div>
 
       <div className="container mx-auto p-10 md:py-20 px-0 md:p-10 md:px-0">
-        <div className="flex justify-between items-center mb-10">
-          <h1 className="text-5xl font-semibold">Historial</h1>
-          <div className="flex-row-reverse">
+        <div className="flex items-center mb-10">
+          <div className="flex items-center">
+            <h1 className="text-5xl font-semibold align-middle">Historial</h1>
+            <HoverText />
+          </div>
+          <div className="ml-auto">
             <Link to="/analysis-form">
-              <button className="mt-4 p-2 bg-blue-500 text-white rounded-xl hover:bg-blue-600 mx-3">Nuevo análisis</button>
+              <button className=" p-2 bg-blue-500 text-white rounded-xl hover:bg-blue-600 mx-3">Nuevo análisis</button>
             </Link>
             <Link to="/keys">
-              <button className="mt-4 p-2 bg-blue-500 text-white rounded-xl hover:bg-blue-600 mx-3">Gestionar llaves de acceso</button>
+              <button className="p-2 bg-blue-500 text-white rounded-xl hover:bg-blue-600 mx-3">Gestionar llaves de acceso</button>
             </Link>
           </div>
         </div>
@@ -63,10 +77,10 @@ function LoggedIn() {
                 <span>{item.documents.length}</span>
               </div>
               <div className="grid grid-cols-1 sm:grid-cols-2 justify-between px-4 gap-4">
-                <Link to={`/analysis/${item.id}`} className="text-center mt-4 p-2 bg-blue-500 text-white rounded-xl hover:bg-blue-600">
+                <Link to={`/analysis/${item.id}`} className="text-center mt-4 p-2 text-blue-500 bg-white border border-blue-500 rounded-xl transition ease-in-out duration-500 hover:bg-blue-500 hover:text-white">
                   <button>Ver</button>
                 </Link>
-                <button className="mt-4 p-2 bg-red-500 text-white rounded-xl hover:bg-red-600">Eliminar</button>
+                <button onClick={() => handleDocumentDelete(item.id)} className="text-center mt-4 p-2 text-red-500 bg-white rounded-xl border border-red-500 transition ease-in-out duration-500 hover:bg-red-500 hover:text-white">Eliminar</button>
               </div>
             </div>
           ))}

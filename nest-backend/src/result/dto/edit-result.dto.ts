@@ -5,19 +5,19 @@ import {
 } from 'class-validator';
 
 export class EditResultDto{
-    @IsInt()
     @IsOptional()
+    @IsInt()
     ia_score: number;
 
-    @IsString()
     @IsOptional()
+    @IsString()
     ia_result: string;
 
-    @IsInt()
     @IsOptional()
+    @IsInt()
     ai_id: number;
 
-    @IsInt()
     @IsOptional()
+    @IsInt()
     document_id: number;
 }

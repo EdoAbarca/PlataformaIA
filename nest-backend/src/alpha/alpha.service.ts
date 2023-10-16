@@ -40,9 +40,31 @@ export class AlphaService {
     });
   };
 
+  async getAIs() {
+    return await this.prisma.aI.findMany();
+  }
+
+  async editKey(id: number, key: string) {
+    return await this.prisma.key.update({
+      where: {
+        id: id
+      },
+      data: {
+        ai_key: key
+      }
+    });
+  }
+
+  async deleteKey(id: number) {
+    return await this.prisma.key.delete({
+      where: {
+        id: id
+      }
+    });
+  }
+
   async cascadeCleanDatabase() {
     await this.prisma.analysis.deleteMany();
-    await this.prisma.key.deleteMany();
     await this.prisma.aI.deleteMany();
   }
 
@@ -52,6 +74,7 @@ export class AlphaService {
       await this.prisma.aI.create({ data: { name: 'PoC AI' } });
       await this.prisma.aI.create({ data: { name: 'CopyLeaks' } });
       await this.prisma.aI.create({ data: { name: 'Originality' } });
+
       //Temporal data
       let ai1 = await this.prisma.aI.findFirst({ where: { name: 'PoC AI' } });
       let ai2 = await this.prisma.aI.findFirst({ where: { name: 'CopyLeaks' } });

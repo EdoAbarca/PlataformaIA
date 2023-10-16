@@ -6,8 +6,10 @@ import LoggedIn from './views/LoggedIn.jsx'
 import Analysis from './views/Analysis.jsx'
 import FormAnalysis from './views/FormAnalysis.jsx'
 import Keys from './views/Keys.jsx'
+import AddKey from './views/AddKey.jsx'
+import EditKey from './views/EditKey.jsx'
 import NotFound from './views/NotFound.jsx'
-import Navbar from './components/Navbar-old.jsx';
+import Navbar from './components/Navbar.jsx';
 import FAQ from './views/FAQ.jsx'
 
 function App() {
@@ -23,6 +25,8 @@ function App() {
           <Route path='/analysis/:id' element={<Analysis />} />
           <Route path='/analysis-form' element={<FormAnalysis />} />
           <Route path='/keys' element={<Keys />} />
+          <Route path='/keys/add' element={<AddKey/>}/>
+          <Route path='/keys/edit/:id' element={<EditKey/>}/>
           <Route path="/faq" element={<FAQ />} />
           <Route path='*' element={<NotFound />} />
         </Routes>

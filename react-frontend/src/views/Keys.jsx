@@ -9,7 +9,7 @@ function Keys() {
   useEffect(() => {
     async function fetchKeys() {
       try {
-        const response = await fetch("http://localhost:3333/alpha/final/keys");
+        const response = await fetch("http://localhost:3333/alpha/final/key");
         const data = await response.json();
         setKeys(data);
         console.log(data);
@@ -27,6 +27,17 @@ function Keys() {
     setKeys(newKeys);
   };
 
+  async function handleDelete(id) {
+    try {
+      await fetch(`http://localhost:3333/alpha/final/key/${id}`, {
+        method: "DELETE",
+      });
+      setKeys(keys.filter((item) => item.id !== id));
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <div>
       <div className="w-full sm:px-6">
@@ -34,9 +45,11 @@ function Keys() {
           <div className="flex items-center justify-between">
             <h1 className="font-bold text-5xl my-2">Llaves</h1>
             <div className="flex-row-reverse">
-              <button className="rounded-xl mt-4 mx-4 px-6 py-3 bg-gradient-to-r from-indigo-500 to-blue-500 sm:mt-0">
-                <p className="text-sm font-medium leading-none text-white">Agregar</p>
-              </button>
+              <Link to={"/keys/add"}>
+                <button className="rounded-xl mt-4 mx-4 px-6 py-3 bg-gradient-to-r from-indigo-500 to-blue-500 sm:mt-0">
+                  <p className="text-sm font-medium leading-none text-white">Agregar</p>
+                </button>
+              </Link>
               <Link to={"/loggedin"}>
                 <button className="border rounded-xl mt-4 px-6 py-3 sm:mt-0">
                   <p className="text-sm font-medium leading-none">Volver</p>
@@ -77,8 +90,13 @@ function Keys() {
                         </button>
                         {item.showMenu && (
                           <div className="fixed right-0 mt-2 w-auto bg-white rounded-md overflow-hidden shadow-xl z-10">
-                            <button className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900">Editar</button>
-                            <button className="block px-4 py-2 text-sm text-gray-700 hover:bg-red-500 hover:text-gray-900">Eliminar</button>
+                            <Link to={{
+                              pathname: `/keys/edit/${item.id}`,
+                              state: { ai: item.ai.name } //Corregir, arroja null
+                            }}>
+                              <button className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900">Editar</button>
+                            </Link>
+                            <button onClick={() => handleDelete(item.id)} className="block px-4 py-2 text-sm text-gray-700 hover:bg-red-500 hover:text-gray-900">Eliminar</button>
                           </div>
                         )}
                       </div>

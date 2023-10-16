@@ -1,16 +1,15 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 
-
 export default function FAQ() {
   const navigate = useNavigate();
   return (
     <div
-      className="relative w-full bg-white px-6 pt-10 pb-8 mt-8 shadow-xl ring-1 ring-gray-900/5 sm:mx-auto sm:max-w-2xl sm:rounded-lg sm:px-10">
+      className="relative w-full bg-white px-6 pt-10 pb-8 my-8 shadow-xl ring-1 ring-gray-900/5 sm:mx-auto sm:max-w-2xl sm:rounded-lg sm:px-10">
       <div className="mx-auto px-5">
         <div className="flex flex-col items-center">
           <h2 className="mt-5 text-center text-3xl font-bold tracking-tight md:text-5xl">FAQ</h2>
-          <p className="mt-3 text-lg text-neutral-500 md:text-xl">Frequenty asked questions</p>
+          <p className="mt-3 text-lg text-neutral-500 md:text-xl">Preguntas frecuentes</p>
           <button className="mt-4 text-center font-semibold px-5 py-2 border rounded-2xl" onClick={() => navigate(-1)}>Volver</button>
 
         </div>
@@ -18,7 +17,7 @@ export default function FAQ() {
           <div className="py-5">
             <details className="group">
               <summary className="flex cursor-pointer list-none items-center justify-between font-medium">
-                <span> How does the billing work?</span>
+                <span> ¿Cómo funciona el servicio?</span>
                 <span className="transition group-open:rotate-180">
                   <svg fill="none" height="24" shapeRendering="geometricPrecision"
                     stroke="currentColor" strokeLinecap="round" strokeLinejoin="round"
@@ -37,7 +36,7 @@ export default function FAQ() {
           <div className="py-5">
             <details className="group">
               <summary className="flex cursor-pointer list-none items-center justify-between font-medium">
-                <span> Can I get a refund for my subscription?</span>
+                <span> ¿Puedo obtener un reembolso o cancelar mi suscripción?</span>
                 <span className="transition group-open:rotate-180">
                   <svg fill="none" height="24" shapeRendering="geometricPrecision"
                     stroke="currentColor" strokeLinecap="round" strokeLinejoin="round"
@@ -57,7 +56,7 @@ export default function FAQ() {
           <div className="py-5">
             <details className="group">
               <summary className="flex cursor-pointer list-none items-center justify-between font-medium">
-                <span> How do I cancel my subscription?</span>
+                <span> ¿Qué sucede con la información que entrego a esta plataforma?</span>
                 <span className="transition group-open:rotate-180">
                   <svg fill="none" height="24" shapeRendering="geometricPrecision"
                     stroke="currentColor" strokeLinecap="round" strokeLinejoin="round"
@@ -75,7 +74,7 @@ export default function FAQ() {
           <div className="py-5">
             <details className="group">
               <summary className="flex cursor-pointer list-none items-center justify-between font-medium">
-                <span> Is there a free trial?</span>
+                <span> ¿Hay una prueba gratis?</span>
                 <span className="transition group-open:rotate-180">
                   <svg fill="none" height="24" shapeRendering="geometricPrecision"
                     stroke="currentColor" strokeLinecap="round" strokeLinejoin="round"
@@ -93,7 +92,7 @@ export default function FAQ() {
           <div className="py-5">
             <details className="group">
               <summary className="flex cursor-pointer list-none items-center justify-between font-medium">
-                <span> How do I contact support?</span>
+                <span> ¿?</span>
                 <span className="transition group-open:rotate-180">
                   <svg fill="none" height="24" shapeRendering="geometricPrecision"
                     stroke="currentColor" strokeLinecap="round" strokeLinejoin="round"
@@ -105,24 +104,6 @@ export default function FAQ() {
               <p className="group-open:animate-fadeIn mt-3 text-neutral-600">If you need help with our platform or
                 have any other questions, you can contact the company's support team by submitting a support
                 request through the website or by emailing support@ourwebsite.com.
-              </p>
-            </details>
-          </div>
-          <div className="py-5">
-            <details className="group">
-              <summary className="flex cursor-pointer list-none items-center justify-between font-medium">
-                <span> Do you offer any discounts or promotions?</span>
-                <span className="transition group-open:rotate-180">
-                  <svg fill="none" height="24" shapeRendering="geometricPrecision"
-                    stroke="currentColor" strokeLinecap="round" strokeLinejoin="round"
-                    strokeWidth="1.5" viewBox="0 0 24 24" width="24">
-                    <path d="M6 9l6 6 6-6"></path>
-                  </svg>
-                </span>
-              </summary>
-              <p className="group-open:animate-fadeIn mt-3 text-neutral-600">We may offer discounts or promotions
-                from time to time. To stay up-to-date on the latest deals and special offers, you can sign
-                up for the company's newsletter or follow it on social media.
               </p>
             </details>
           </div>

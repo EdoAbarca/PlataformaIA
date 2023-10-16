@@ -41,13 +41,28 @@ export class AlphaController {
             return this.alphaService.getAnalysis();
         }
 
-        @Get('keys')
+        @Get('key')
         getKeys(){
             return this.alphaService.getKeys();
+        }
+
+        @Patch('key/:id')
+        editKey(@Param('id', ParseIntPipe) id: number, @Body() body: any){
+            return this.alphaService.editKey(id, body.key);
         }
 
         @Get('analysis/:id')
         getAnalysisDocs(@Param('id', ParseIntPipe) id: number){
             return this.alphaService.getAnalysisDocs(id);
+        }
+
+        @Get('ai')
+        getAIs(){
+            return this.alphaService.getAIs();
+        }
+
+        @Delete('key/:id')
+        deleteKey(@Param('id', ParseIntPipe) id: number){
+            return this.alphaService.deleteKey(id);
         }
 }
