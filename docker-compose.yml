@@ -1,26 +1,50 @@
-version: "3.9"
+#Version actual docker-compose.yml
+
+version: "3.8"
 services:
-  frontend:
-    build:
-      context: ./react-frontend
-      dockerfile: Dockerfile
+  database:
+    image: postgres:13
+    restart: always
+    env_file:
+      - ./nest-backend/.env
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
     ports:
-      - "8080:5173"
-    depends_on:
-      - backend
+      - "5432:5432"
+    networks:
+      - ia_network
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
   backend:
     build:
       context: ./nest-backend
       dockerfile: Dockerfile
     ports:
-      - "8081:3333"
+      - "3333:3333"
     depends_on:
       - database
-  database:
-    image: postgres:13
+    networks:
+      - ia_network
+    env_file:
+      - ./nest-backend/.env
     environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres
-      POSTGRES_DB: ia_dev
+      DATABASE_URL: postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres:5433/${POSTGRES_DB}?schema=public
+  frontend:
+    build:
+      context: ./react-frontend
+      dockerfile: Dockerfile
     ports:
-      - "8082:5432"
+      - "5173:5173"
+    depends_on:
+      - backend
+    networks:
+      - ia_network
+  
+networks:
+  ia_network:
+    driver: bridge
+
+volumes:
+  postgres_data:
