@@ -1,8 +1,7 @@
-import React, { useState } from "react";
-import { useNavigate, Link } from "react-router-dom";
+import { useState } from "react";
+import { Link } from "react-router-dom";
 
 function Register() {
-  const navigate = useNavigate();
   const [formValues, setFormValues] = useState({
     username: "",
     email: "",

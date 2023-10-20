@@ -1,7 +1,8 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faListUl, faExclamation } from "@fortawesome/free-solid-svg-icons";
+import { faListUl } from "@fortawesome/free-solid-svg-icons";
+//import { faListUl, faExclamation } from "@fortawesome/free-solid-svg-icons";
 import HoverText from "../components/HoverText.jsx";
 
 function Keys() {
@@ -37,7 +38,7 @@ function Keys() {
     } catch (error) {
       console.log(error);
     }
-  };
+  }
 
   return (
     <div>

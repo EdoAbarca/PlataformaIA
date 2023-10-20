@@ -1,4 +1,3 @@
-import React from "react";
 
 function ForgotPassword() {
   return (
@@ -10,7 +9,7 @@ function ForgotPassword() {
             <input type="email" className="bg-gray-100 text-gray-900 border-0 rounded-md p-2 mb-4 focus:bg-gray-200 focus:outline-none focus:ring-1 focus:ring-blue-500 transition ease-in-out duration-150" placeholder="Correo electrónico" />
             <input type="password" className="bg-gray-100 text-gray-900 border-0 rounded-md p-2 mb-4 focus:bg-gray-200 focus:outline-none focus:ring-1 focus:ring-blue-500 transition ease-in-out duration-150" placeholder="Nueva contraseña" />
             <div className="flex items-center justify-between flex-wrap">
-              <label for="remember-me" className="text-sm text-gray-900 cursor-pointer">
+              <label htmlFor="remember-me" className="text-sm text-gray-900 cursor-pointer">
                 <input type="checkbox" id="remember-me" className="mr-2">
                   Recordarme
                 </input>

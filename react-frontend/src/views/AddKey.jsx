@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 
 function AddKey() {
@@ -19,7 +19,7 @@ function AddKey() {
       }
     };
     fetchData();
-  }, []);
+  }, [])
 
   async function handleSubmit(event) {
     event.preventDefault();
@@ -46,7 +46,7 @@ function AddKey() {
         console.error(error);
       }*/
     }
-  };
+  }
 
   return (
     <div>

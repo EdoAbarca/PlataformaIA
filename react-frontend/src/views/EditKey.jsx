@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { useNavigate, Link, useParams, useLocation } from "react-router-dom";
+import { useState } from "react";
+import { Link, useParams, useLocation } from "react-router-dom";
 
 function EditKey() {
   //const navigate = useNavigate();
@@ -26,7 +26,7 @@ function EditKey() {
     } catch (error) {
       console.error(error);
     }
-  };
+  }
 
   return (
     <div>
