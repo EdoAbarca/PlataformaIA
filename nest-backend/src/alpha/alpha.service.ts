@@ -13,25 +13,30 @@ export class AlphaService {
     });
   }
 
-  async getAnalysisDocs(id: number) {
-    return await this.prisma.analysis.findUnique({
+  async getAnalysisDocs(analysis_id: number) {
+    return await this.prisma.document.findMany({
       where: {
-        id: id
-      }, 
+        analysis_id: analysis_id
+      },
       include: {
-        documents: {
+        results: {
           include: {
-            results: {
-              include: {
-                ai: true
-              }
-            }
+            ai: true
           }
         }
       }
     });
   }
-  
+
+  async createKey(body: any) {
+    return await this.prisma.key.create({
+      data: {
+        ai_key: body.key,
+        ai_id: body.ai_id
+      }
+    });
+  }
+
   async getKeys() {
     return await this.prisma.key.findMany({
       include: {
@@ -39,10 +44,6 @@ export class AlphaService {
       }
     });
   };
-
-  async getAIs() {
-    return await this.prisma.aI.findMany();
-  }
 
   async editKey(id: number, key: string) {
     return await this.prisma.key.update({
@@ -61,6 +62,28 @@ export class AlphaService {
         id: id
       }
     });
+  }
+
+  async getAIs() {
+    return await this.prisma.aI.findMany();
+  }
+
+  async deleteAnalysis(id: number) {
+    return await this.prisma.analysis.delete({
+      where: {
+        id: id
+      }
+    });
+  }
+
+  async createAnalysis(body: any) {
+    //Formato a validar posteriormente
+    let analysis = await this.prisma.analysis.create({
+      data: {
+        title: body.title,
+      }
+    });
+    
   }
 
   async cascadeCleanDatabase() {
@@ -145,31 +168,31 @@ export class AlphaService {
     console.log('Tracking database...');
 
     this.prisma.aI.findMany().then((data) => {
-      console.log('AIs lenght: ', data.length);
+      console.log('AIs length: ', data.length);
       console.log('AIs: ', data);
     }, (err) => {
       console.log('Error: ', err);
     });
     this.prisma.key.findMany().then((data) => {
-      console.log('Keys lenght: ', data.length);
+      console.log('Keys length: ', data.length);
       console.log('Keys: ', data);
     }, (err) => {
       console.log('Error: ', err);
     });
     this.prisma.analysis.findMany().then((data) => {
-      console.log('Analyses lenght: ', data.length);
+      console.log('Analyses length: ', data.length);
       console.log('Analysis: ', data);
     }, (err) => {
       console.log('Error: ', err);
     });
     this.prisma.document.findMany().then((data) => {
-      console.log('Documents lenght: ', data.length);
+      console.log('Documents length: ', data.length);
       console.log('Documents: ', data);
     }, (err) => {
       console.log('Error: ', err);
     });
     this.prisma.result.findMany().then((data) => {
-      console.log('Results lenght: ', data.length);
+      console.log('Results length: ', data.length);
       console.log('Results: ', data);
     }, (err) => {
       console.log('Error: ', err);

@@ -1,5 +1,5 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faHouse } from '@fortawesome/free-solid-svg-icons';
+import { faHouse, faCircleUser } from '@fortawesome/free-solid-svg-icons';
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 function Navbar() {
@@ -12,20 +12,14 @@ function Navbar() {
           onClick={() => setIsOpen(!isOpen)}
           className="flex items-center px-3 py-2 rounded text-black-500 hover:text-black-400"
         >
-          <svg
-            className={`fill-current h-3 w-3 ${isOpen ? "hidden" : "block"}`}
-            viewBox="0 0 20 20"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path d="M0 3h20v2H0V3zm0 6h20v2H0V9zm0 6h20v2H0v-2z" />
-          </svg>
-          <svg
-            className={`fill-current h-3 w-3 ${isOpen ? "block" : "hidden"}`}
-            viewBox="0 0 20 20"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path d="M10 8.586L2.929 1.515 1.515 2.929 8.586 10l-7.071 7.071 1.414 1.414L10 11.414l7.071 7.071 1.414-1.414L11.414 10l7.071-7.071-1.414-1.414L10 8.586z" />
-          </svg>
+          <FontAwesomeIcon
+            icon={faCircleUser}
+            className={`fill-current h-12 w-12 ${isOpen ? "hidden" : "block"}`}
+          />
+          <FontAwesomeIcon
+            icon={faCircleUser}
+            className={`fill-current h-12 w-12 ${isOpen ? "block" : "hidden"}`}
+          />
         </button>
       </div>
       <div
@@ -53,25 +47,10 @@ function Navbar() {
             onClick={() => setIsOpen(!isOpen)}
             className="flex items-center justify-center h-10 w-10 rounded-full bg-gray-300 hover:bg-gray-400 focus:outline-none focus:shadow-outline"
           >
-            <svg
-              className="h-6 w-6 text-gray-700"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M12 14c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4z"
-              />
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M21 21v-2a4 4 0 00-4-4H7a4 4 0 00-4 4v2"
-              />
-            </svg>
+            <FontAwesomeIcon
+              icon={faCircleUser}
+              className="h-12 w-12 text-gray-700"
+            />
           </button>
           {isOpen && (
             <div className="absolute right-0 mt-2 py-2 w-64 bg-white rounded-lg shadow-xl">

@@ -24,7 +24,7 @@ function Register() {
       <div className="flex flex-col items-center justify-center h-screen">
         <div className="w-full max-w-md bg-white rounded-lg shadow-md p-6">
           <h2 className="text-2xl font-bold text-gray-900 mb-4">Crear una cuenta</h2>
-          <form className="flex flex-col" onSubmit={handleSubmit}>
+          <form className="flex flex-col">
             <input
               type="string"
               name="username"
@@ -63,13 +63,14 @@ function Register() {
             </div>
             <button
               type="submit"
-              className="bg-gradient-to-r from-indigo-500 to-blue-500 text-white font-bold py-2 px-4 rounded-md mt-4 hover:from-indigo-600 hover:to-blue-600 transition ease-in-out duration-500"
+              onClick={handleSubmit}
+              className="border border-green-500 text-green-500 bg-white font-bold py-2 px-4 rounded-xl mt-4 hover:text-white hover:bg-green-500 transition ease-in-out duration-500"
             >
               Crear
             </button>
             <Link
               to={"/"}
-              className="text-black py-2 px-4 mt-4 rounded-xl shadow-md text-center font-semibold"
+              className="text-black py-2 px-4 mt-4 rounded-xl border border-black text-center font-semibold"
             >
               Volver
             </Link>

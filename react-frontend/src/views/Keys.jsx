@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faListUl } from "@fortawesome/free-solid-svg-icons";
+import { faListUl, faExclamation } from "@fortawesome/free-solid-svg-icons";
+import HoverText from "../components/HoverText.jsx";
 
 function Keys() {
   const [keys, setKeys] = useState(null);
@@ -42,16 +43,17 @@ function Keys() {
     <div>
       <div className="w-full sm:px-6">
         <div className="bg-white px-4 py-4 md:px-8 md:py-7 xl:px-10">
-          <div className="flex items-center justify-between">
+          <div className="flex items-center">
             <h1 className="font-bold text-5xl my-2">Llaves</h1>
-            <div className="flex-row-reverse">
+            <HoverText />
+            <div className="ml-auto">
               <Link to={"/keys/add"}>
-                <button className="rounded-xl mt-4 mx-4 px-6 py-3 bg-gradient-to-r from-indigo-500 to-blue-500 sm:mt-0">
-                  <p className="text-sm font-medium leading-none text-white">Agregar</p>
+                <button className="rounded-xl mt-4 mx-4 px-6 py-3 bg-white text-green-500 border border-green-500 transform ease-in-out duration-500 hover:bg-green-500 hover:text-white sm:mt-0">
+                  <p className="text-sm font-medium leading-none">Agregar</p>
                 </button>
               </Link>
               <Link to={"/loggedin"}>
-                <button className="border rounded-xl mt-4 px-6 py-3 sm:mt-0">
+                <button className="border border-black rounded-xl mt-4 px-6 py-3 sm:mt-0">
                   <p className="text-sm font-medium leading-none">Volver</p>
                 </button>
               </Link>
@@ -90,10 +92,7 @@ function Keys() {
                         </button>
                         {item.showMenu && (
                           <div className="fixed right-0 mt-2 w-auto bg-white rounded-md overflow-hidden shadow-xl z-10">
-                            <Link to={{
-                              pathname: `/keys/edit/${item.id}`,
-                              state: { ai: item.ai.name } //Corregir, arroja null
-                            }}>
+                            <Link to={`/keys/edit/${item.id}`} state={{item}}>
                               <button className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900">Editar</button>
                             </Link>
                             <button onClick={() => handleDelete(item.id)} className="block px-4 py-2 text-sm text-gray-700 hover:bg-red-500 hover:text-gray-900">Eliminar</button>
@@ -101,6 +100,7 @@ function Keys() {
                         )}
                       </div>
                     </td>
+
                   </tr>
                 ))}
               </tbody>

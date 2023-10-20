@@ -1,5 +1,7 @@
 import { Link } from "react-router-dom";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { faFileWord, faFilePdf } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 export default function FormAnalysis() {
   const [formValues, setFormValues] = useState({
@@ -10,10 +12,32 @@ export default function FormAnalysis() {
     ai3: false,
     files: [],
   });
+  const [aiOptions, setAiOptions] = useState([]);
 
-  const handleInputChange = (event) => {
+  useEffect(() => {
+    fetch("http://localhost:3333/alpha/final/ai")
+      .then((response) => response.json())
+      .then((data) => setAiOptions(data))
+      .catch((error) => console.log(error));
+  }, []);
+
+  const handleTitleChange = (event) => {
+    setFormValues({
+      ...formValues,
+      title: event.target.value,
+    });
+  };
+
+  const handleSemesterChange = (event) => {
+    setFormValues({
+      ...formValues,
+      semester: event.target.value,
+    });
+  };
+
+  const handleAiChange = (event) => {
     const target = event.target;
-    const value = target.type === "checkbox" ? target.checked : target.value;
+    const value = target.checked;
     const name = target.name;
 
     setFormValues({
@@ -51,11 +75,11 @@ export default function FormAnalysis() {
               name="title"
               className="w-full px-3 py-2 border rounded-md focus:outline-none focus:border-blue-500"
               value={formValues.title}
-              onChange={handleInputChange}
+              onChange={handleTitleChange}
             />
           </div>
 
-          <div className="mb-4">
+          <div className="mb-4 hidden">
             <label className="block text-gray-600">Semestre</label>
             <div>
               <input
@@ -64,7 +88,7 @@ export default function FormAnalysis() {
                 name="semester"
                 value="Primer semestre"
                 checked={formValues.semester === "Primer semestre"}
-                onChange={handleInputChange}
+                onChange={handleSemesterChange}
               />
               <label htmlFor="semester1" className="ml-2">
                 Primer semestre
@@ -77,7 +101,7 @@ export default function FormAnalysis() {
                 name="semester"
                 value="Segundo semestre"
                 checked={formValues.semester === "Segundo semestre"}
-                onChange={handleInputChange}
+                onChange={handleSemesterChange}
               />
               <label htmlFor="semester2" className="ml-2">
                 Segundo semestre
@@ -89,45 +113,21 @@ export default function FormAnalysis() {
             <label className="block text-gray-600">
               Inteligencias artificiales
             </label>
-            <div>
-              <input
-                type="checkbox"
-                id="ai1"
-                name="ai1"
-                value="IA 1"
-                checked={formValues.ai1}
-                onChange={handleInputChange}
-              />
-              <label htmlFor="ai1" className="ml-2">
-                PoC AI
-              </label>
-            </div>
-            <div>
-              <input
-                type="checkbox"
-                id="ai2"
-                name="ai2"
-                value="IA 2"
-                checked={formValues.ai2}
-                onChange={handleInputChange}
-              />
-              <label htmlFor="ai2" className="ml-2">
-                CopyLeaks
-              </label>
-            </div>
-            <div>
-              <input
-                type="checkbox"
-                id="ai3"
-                name="ai3"
-                value="IA 3"
-                checked={formValues.ai3}
-                onChange={handleInputChange}
-              />
-              <label htmlFor="ai3" className="ml-2">
-                Originality
-              </label>
-            </div>
+            {aiOptions.map((option) => (
+              <div key={option.id}>
+                <input
+                  type="checkbox"
+                  id={option.id}
+                  name={`ai${option.id}`}
+                  value={option.name}
+                  checked={formValues[`ai${option.id}`]}
+                  onChange={handleAiChange}
+                />
+                <label htmlFor={option.id} className="ml-2">
+                  {option.name}
+                </label>
+              </div>
+            ))}
           </div>
 
           <div className="mb-4 hidden">
@@ -146,7 +146,7 @@ export default function FormAnalysis() {
 
           <div className="mb-4">
             <label htmlFor="files" className="block text-gray-600">
-              Documentos
+              Documentos <FontAwesomeIcon icon={faFileWord} />{" "} <FontAwesomeIcon icon={faFilePdf} />
             </label>
             <input
               type="file"
@@ -161,13 +161,13 @@ export default function FormAnalysis() {
 
           <button
             type="submit"
-            className="w-full bg-blue-500 text-white py-2 rounded-xl hover:bg-blue-600 transition duration-300 ease-in-out"
+            className="w-full py-2 border border-green-500 bg-white text-green-500 rounded-xl transition duration-500 ease-in-out hover:bg-green-500 hover:text-white"
           >
             Realizar análisis
           </button>
           <Link
             to="/loggedin"
-            className="w-full py-2 mt-2 shadow-xl rounded-lg border text-center block"
+            className="w-full py-2 mt-2 rounded-xl border border-black text-black text-center block"
           >
             Volver
           </Link>

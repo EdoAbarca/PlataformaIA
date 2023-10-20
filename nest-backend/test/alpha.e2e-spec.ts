@@ -13,7 +13,7 @@ import { CreateKeyDto, EditKeyDto } from 'src/key/dto';
 import { CreateDocumentDto, EditDocumentDto } from 'src/document/dto';
 import { CreateResultDto, EditResultDto } from 'src/result/dto';
 
-describe('Test alpha e2e', () => {
+describe('Test alpha e2e', () => { //Corregir para siguiente commit
   let app: INestApplication;
   let prisma: PrismaService;
 
@@ -604,8 +604,105 @@ describe('Test alpha e2e', () => {
 
   describe('Test funcionalidades alpha final', () => {
     before(() => {
+      
+      prisma.fillDb();//Llenar base de datos con datos de prueba
+      //Variables con datos de prueba en BD
 
     });
-  })
+    it('Should get all analyses', () => {
+      return pactum
+        .spec()
+        .get('/alpha/final/analysis')
+        .expectStatus(200)
+        .expectJsonLength(1)
+        .inspect()
+        .toss();
+    });
 
+    it('Should get all AIs', () => {
+      return pactum
+        .spec()
+        .get('/alpha/final/ai')
+        .expectStatus(200)
+        .expectJsonLength(3)
+        .inspect()
+        .toss();
+    });
+
+    it('Should create key', () => { //Corregir
+      return pactum
+        .spec()
+        .post('/alpha/final/key')
+        .withBody({
+          key: '1234567890',
+        })
+        .expectStatus(201)
+        .inspect()
+        .toss();
+    });
+
+    it('Should get all keys', () => {
+      return pactum
+        .spec()
+        .get('/alpha/final/key')
+        .expectStatus(200)
+        .expectJsonLength(2)
+        .inspect()
+        .toss();
+    });
+
+    it('Should edit key', () => { //Corregir
+      return pactum
+        .spec()
+        .patch('/alpha/final/key/{id}')
+        .withPathParams('id', '1')
+        .withBody({
+          key: '0987654321',
+        })
+        .expectStatus(200)
+        .inspect()
+        .toss();
+    });
+
+    it('Should delete key', () => { //Corregir
+      return pactum
+        .spec()
+        .delete('/alpha/final/key/{id}')
+        .withPathParams('id', '1')
+        .expectStatus(204)
+        .inspect()
+        .toss();
+    });
+
+    it('Should get all analyses', () => {
+      return pactum
+        .spec()
+        .get('/alpha/final/analysis')
+        .expectStatus(200)
+        .expectJsonLength(1)
+        .inspect()
+        .toss();
+    });
+
+    it('Should delete analysis', () => {
+      return pactum
+        .spec()
+        .delete('/alpha/final/analysis/{id}')
+        .withPathParams('id', '1')
+        .expectStatus(204)
+        .inspect()
+        .toss();
+    });
+
+    it('Should get all analysis documents', () => { //Corregir
+      return pactum
+        .spec()
+        .get('/alpha/final/analysis/{id}')
+        .withPathParams('id', '1')
+        .expectStatus(200)
+        .expectJsonLength(2)
+        .inspect()
+        .toss();
+    });
+  })
 });

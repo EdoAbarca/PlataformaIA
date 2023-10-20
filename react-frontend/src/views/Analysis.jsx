@@ -1,18 +1,21 @@
 import React, { useState, useEffect } from "react";
-import { Link, useParams } from "react-router-dom";
+import { Link, useLocation, useParams } from "react-router-dom";
 
 export default function Analysis() {
-  const [analysis, setAnalysis] = useState(null);
-
+  const [documents, setDocuments] = useState([]);
   const { id } = useParams();
+  const state = useLocation();
+  const analysisTitle = state.state.item.title;
   
   useEffect(() => {
     async function fetchAnalysis() {
       try {
-        const response = await fetch("http://localhost:3333/alpha/final/analysis/"+id);
+        const response = await fetch(`http://localhost:3333/alpha/final/analysis/${id}`);
         const data = await response.json();
-        setAnalysis(data);
         console.log(data);
+        setDocuments(data);
+        console.log(state);
+        console.log(analysisTitle);
       } catch (error) {
         console.log(error);
       }
@@ -26,7 +29,7 @@ export default function Analysis() {
       <div className="w-full sm:px-6">
         <div className="bg-white px-4 py-4 md:px-8 md:py-7 xl:px-10">
           <div className="flex items-center justify-between">
-            <h1 className="font-bold text-5xl mt-4">Análisis / {analysis ? analysis.created.substring(0,10) : "10-10-2023"}</h1>
+            <h1 className="font-bold text-5xl">Análisis / {state ? analysisTitle : "Titulo por defecto"}</h1>
             <div className="flex-row-reverse">
               <Link to={"/loggedin"}>
                 <button className="border rounded-xl mt-4 px-6 py-3 sm:mt-0 mx-2">
@@ -38,7 +41,7 @@ export default function Analysis() {
         </div>
         <div id="grid" className="container mx-auto p-10 md:py-20 px-0 md:p-10 md:px-0">
           <div id="grid-form" className="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-5 items-start">
-            {analysis && analysis.documents.map((document) => (
+            {documents && documents.map((document) => (
               <div key={document.id} id="card"
               className="overflow-hidden rounded-xl border-2 bg-gradient-to-r from-sky-200 p-5 transition-transform duration-500 hover:scale-105 shadow-lg">
                 <div id="bottom-section" className="">
