@@ -2,15 +2,16 @@
 
 version: "3.8"
 services:
-  database:
+  postgres:
     image: postgres:13
+    container_name: postgres
     restart: always
     env_file:
       - ./nest-backend/.env
-    environment:
-      POSTGRES_DB: ${POSTGRES_DB}
-      POSTGRES_USER: ${POSTGRES_USER}
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    #environment:
+      #POSTGRES_DB: ${POSTGRES_DB}
+      #POSTGRES_USER: ${POSTGRES_USER}
+      #POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
     ports:
       - "5432:5432"
     networks:
@@ -24,13 +25,14 @@ services:
     ports:
       - "3333:3333"
     depends_on:
-      - database
+      - postgres
     networks:
       - ia_network
     env_file:
       - ./nest-backend/.env
-    environment:
-      DATABASE_URL: postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres:5433/${POSTGRES_DB}?schema=public
+    command: sh -c "npm run wait && npm run start:prod"
+    #environment:
+      #DATABASE_URL: postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB}?schema=public
   frontend:
     build:
       context: ./react-frontend
@@ -39,12 +41,13 @@ services:
       - "5173:5173"
     depends_on:
       - backend
+      - postgres
     networks:
       - ia_network
   
 networks:
   ia_network:
-    driver: bridge
+    #driver: bridge
 
 volumes:
   postgres_data:
