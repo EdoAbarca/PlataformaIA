@@ -27,8 +27,8 @@ export class PrismaService extends PrismaClient {
     let ai1 = await this.aI.findFirst({ where: { name: 'PoC AI' } });
     let ai2 = await this.aI.findFirst({ where: { name: 'CopyLeaks' } });
     let ai3 = await this.aI.findFirst({ where: { name: 'Originality' } });
-    await this.key.create({ data: { ai_key: "1234567890", ai_id: ai2.id } });
-    await this.key.create({ data: { ai_key: "0987654321", ai_id: ai3.id } });
+    await this.key.create({ data: { api_key: "1234567890", api_email:"ejemail1@gmail.com", ai_id: ai2.id } });
+    await this.key.create({ data: { api_key: "0987654321", api_email:"ejemail2@gmail.com", ai_id: ai3.id } });
 
     await this.analysis.create({
       data: {

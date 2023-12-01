@@ -54,9 +54,33 @@ export default function FormAnalysis() {
     });
   };
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
-    console.log(formValues);
+    try {
+      const formData = new FormData();
+      formData.append("title", formValues.title);
+      formData.append("semester", formValues.semester);
+      formData.append("ai1", formValues.ai1);
+      formData.append("ai2", formValues.ai2);
+      formData.append("ai3", formValues.ai3);
+
+      for (let i = 0; i < formValues.files.length; i++) {
+        formData.append("files", formValues.files[i]);
+      }
+      const response = await fetch("http://localhost:3333/alpha/final/analysis", {
+        method: "POST",
+        headers: {
+          // Add the content type header
+          "Content-Type": "multipart/form-data",
+        },
+        body: formData,
+      });
+      const data = await response.json();
+      console.log(data);
+      // Handle the response data
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (

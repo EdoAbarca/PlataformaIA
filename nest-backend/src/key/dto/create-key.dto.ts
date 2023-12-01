@@ -1,13 +1,18 @@
 import {
     IsNotEmpty,
     IsString,
+    IsEmail,
     IsInt,
 } from 'class-validator';
 
 export class CreateKeyDto {
     @IsString()
     @IsNotEmpty()
-    ai_key: string;
+    api_key: string;
+
+    @IsEmail()
+    @IsNotEmpty()
+    api_email: string;
 
     @IsInt()
     @IsNotEmpty()

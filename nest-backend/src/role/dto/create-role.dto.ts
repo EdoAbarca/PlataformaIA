@@ -6,5 +6,5 @@ import {
 export class CreateRoleDto {
     @IsString()
     @IsNotEmpty()
-    name: string;
+    role: string;
 }

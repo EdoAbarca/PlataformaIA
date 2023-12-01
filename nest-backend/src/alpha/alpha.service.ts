@@ -1,6 +1,8 @@
 import { HttpException, Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
-
+import { PDFLoader } from "langchain/document_loaders/fs/pdf";
+import { HttpStatus, Res } from '@nestjs/common';
+import { Response } from 'express';
 @Injectable()
 export class AlphaService {
   constructor(private prisma: PrismaService) { }
@@ -31,7 +33,8 @@ export class AlphaService {
   async createKey(body: any) {
     return await this.prisma.key.create({
       data: {
-        ai_key: body.key,
+        api_key: body.key,
+        api_email: body.email,
         ai_id: body.ai_id
       }
     });
@@ -51,7 +54,7 @@ export class AlphaService {
         id: id
       },
       data: {
-        ai_key: key
+        api_key: key
       }
     });
   }
@@ -78,12 +81,13 @@ export class AlphaService {
 
   async createAnalysis(body: any) {
     //Formato a validar posteriormente
+    /* 
     let analysis = await this.prisma.analysis.create({
       data: {
         title: body.title,
       }
-    });
-    
+    });*/
+    console.log(body);
   }
 
   async cascadeCleanDatabase() {
@@ -102,8 +106,8 @@ export class AlphaService {
       let ai1 = await this.prisma.aI.findFirst({ where: { name: 'PoC AI' } });
       let ai2 = await this.prisma.aI.findFirst({ where: { name: 'CopyLeaks' } });
       let ai3 = await this.prisma.aI.findFirst({ where: { name: 'Originality' } });
-      await this.prisma.key.create({ data: { ai_key: "1234567890", ai_id: ai2.id } });
-      await this.prisma.key.create({ data: { ai_key: "0987654321", ai_id: ai3.id } });
+      await this.prisma.key.create({ data: { api_key: "1234567890", api_email:"ejemail1@gmail.com", ai_id: ai2.id } });
+      await this.prisma.key.create({ data: { api_key: "0987654321", api_email:"ejemail2@gmail.com", ai_id: ai3.id } });
 
       await this.prisma.analysis.create({
         data: {
@@ -159,7 +163,7 @@ export class AlphaService {
         }
       });
     } catch (error) {
-      throw new HttpException('Error: ' + error, 500);
+      throw new HttpException('Error: ' + error, HttpStatus.BAD_REQUEST);
     }
 
   }
@@ -198,4 +202,16 @@ export class AlphaService {
       console.log('Error: ', err);
     });
   }
+
+  async parseTesisDoc(res: Response) {
+    try {
+      const loader = new PDFLoader("./tesis.pdf", {
+        splitPages: false,
+      });
+      const docs = await loader.load();
+      return res.status(HttpStatus.OK).json(docs);
+      } catch (error) {
+        throw new HttpException('Error: ' + error, HttpStatus.BAD_REQUEST);
+      }
+    }
 }

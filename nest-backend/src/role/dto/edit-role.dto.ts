@@ -6,5 +6,5 @@ import {
   export class EditRoleDto {
     @IsString()
     @IsOptional()
-    name?: string;
+    role?: string;
   }

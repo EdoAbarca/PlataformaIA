@@ -1,3 +1,5 @@
+//MODIFICAR PARA QUE SEA UNA TABLA CON TODOS LOS TAGS
+
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -81,7 +83,7 @@ function Keys() {
                 {keys && keys.map((item, index) => (
                   <tr key={item.id} className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
                     <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                      {item.api_key}
+                      {item.ai_key}
                     </th>
                     <td className="px-6 py-4">
                       {item.ai.name}

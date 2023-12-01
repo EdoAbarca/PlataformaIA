@@ -2,7 +2,7 @@
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
 generator client {
-  provider = "prisma-client-js"
+  provider      = "prisma-client-js"
   binaryTargets = ["native", "debian-openssl-1.1.x", "linux-musl-openssl-3.0.x"]
 }
 
@@ -11,15 +11,27 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model User {
+  id        Int      @id @default(autoincrement())
+  email     String   @unique
+  username  String
+  password  String
+  createdAt DateTime @default(now())
+
+  @@map("users")
+}
+
 model Role {
   id   Int    @id @default(autoincrement())
-  name String @unique
+  role String @unique
+
+  //users     User[]
   @@map("roles")
 }
 
 model AI {
   id      Int      @id @default(autoincrement())
-  name    String   
+  name    String
   keys    Key[]
   results Result[]
 
@@ -27,10 +39,11 @@ model AI {
 }
 
 model Key {
-  id     Int    @id @default(autoincrement())
-  ai_key String
-  ai     AI     @relation(fields: [ai_id], references: [id], onDelete: Cascade)
-  ai_id  Int
+  id        Int    @id @default(autoincrement())
+  api_key   String
+  api_email String
+  ai        AI     @relation(fields: [ai_id], references: [id], onDelete: Cascade)
+  ai_id     Int
 
   @@map("keys")
 }
@@ -51,7 +64,6 @@ model Document {
   analysis    Analysis @relation(fields: [analysis_id], references: [id], onDelete: Cascade)
   analysis_id Int
 
-  //file File
   @@map("documents")
 }
 

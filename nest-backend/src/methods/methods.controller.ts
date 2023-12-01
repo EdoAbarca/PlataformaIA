@@ -11,12 +11,13 @@ import {
     Post,
     //UseGuards,
 } from '@nestjs/common';
+import { MethodsService } from './methods.service';
 //import { JwtGuard } from '../auth/guard';
-import { FunctionalitiesService } from './functionalities.service';
 
 @Controller('api/final')
-export class FunctionalitiesController {
-    constructor(private functionalitiesService: FunctionalitiesService) { }
+export class MethodsController {
+    constructor(private methodsService: MethodsService) { }
+
     /* 
     @Get('keys/:idUser')
     getUserKeys(@Param('idUser', ParseIntPipe) idUser: number) {
@@ -78,5 +79,4 @@ export class FunctionalitiesController {
     ) {
         return this.functionalitiesService.createUserAnalysis(idUser, createAnalysisDto, createDocumentsDto);
     }*/
-
 }

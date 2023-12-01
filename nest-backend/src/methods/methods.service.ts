@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 
 @Injectable()
-export class FunctionalitiesService {
+export class MethodsService {
     constructor(private prisma: PrismaService) { }
 
     //Funcionalidades finales
@@ -71,6 +71,4 @@ export class FunctionalitiesService {
 
         return analysis;
     }*/
- 
-    //Funcionalidades temporales (sin login de usuario)
 }

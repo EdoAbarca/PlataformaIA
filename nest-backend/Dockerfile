@@ -1,4 +1,4 @@
-FROM node:16-alpine
+FROM node:20-alpine
 
 WORKDIR /usr/src/app
 
@@ -12,8 +12,6 @@ RUN npm install
 COPY . .
 
 RUN npx prisma generate
-#RUN npx prisma migrate dev
-#RUN npx prisma db push
 
 RUN npm run build
 

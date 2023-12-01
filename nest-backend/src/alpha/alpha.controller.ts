@@ -9,8 +9,10 @@ import {
     ParseIntPipe,
     Patch,
     Post,
+    Res,
     //UseGuards,
 } from '@nestjs/common';
+import { Response } from 'express';
 import { AlphaService } from './alpha.service';
 //import { JwtGuard } from '../auth/guard';
 
@@ -78,5 +80,13 @@ export class AlphaController {
             return this.alphaService.deleteAnalysis(id);
         }
 
-        
+        @Get('parse_doc')
+        parseTesisDoc(@Res() res: Response){
+            return this.alphaService.parseTesisDoc(res);
+        }
+
+        @Post('analysis')
+        createAnalysis(@Body() body: any){
+            return this.alphaService.createAnalysis(body);
+        }
 }
