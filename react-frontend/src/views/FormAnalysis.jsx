@@ -2,82 +2,146 @@ import { Link } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { faFileWord, faFilePdf } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+//import * as mammoth from "mammoth";
+//import pdfParse from "pdf-parse";
+//import { readFile } from "fs/promises"
+//import * as fs from 'fs';
+//import pdfjs from "pdfjs-dist/es5/build/pdf";
 
 export default function FormAnalysis() {
-  const [formValues, setFormValues] = useState({
-    title: "",
-    semester: "",
-    ai1: false,
-    ai2: false,
-    ai3: false,
-    files: [],
-  });
-  const [aiOptions, setAiOptions] = useState([]);
+  const [title, setTitle] = useState("");
+  const [keys, setKeys] = useState([]);
+  const [files, setFiles] = useState([]);
+  const [documents, setDocuments] = useState([]);
+  const [keyOptions, setKeyOptions] = useState([]);
 
   useEffect(() => {
-    fetch("http://localhost:3333/alpha/final/ai")
+    fetch("http://localhost:3333/beta/final/key")
       .then((response) => response.json())
-      .then((data) => setAiOptions(data))
+      .then((data) => setKeyOptions(data))
       .catch((error) => console.log(error));
   }, []);
 
   const handleTitleChange = (event) => {
-    setFormValues({
-      ...formValues,
-      title: event.target.value,
-    });
+    setTitle(event.target.value);
   };
 
-  const handleSemesterChange = (event) => {
-    setFormValues({
-      ...formValues,
-      semester: event.target.value,
-    });
-  };
-
-  const handleAiChange = (event) => {
-    const target = event.target;
-    const value = target.checked;
-    const name = target.name;
-
-    setFormValues({
-      ...formValues,
-      [name]: value,
-    });
+  const handleKeyChange = (event) => {
+    const id = event.target.id;
+    const checked = event.target.checked;
+    console.log(keys);
+    console.log(keyOptions);
+    console.log(id, checked);
+    console.log(keyOptions.find(key => key.id.toString() === id.toString()));
+    console.log(keyOptions.some(key => key.id.toString() === id.toString()));
+    //console.log(keys.includes(keyOptions.find(key => key.id.toString() === id.toString()))); //No sirve
+    
+    if (checked) {
+      setKeys([...keys, keyOptions.find(key => key.id.toString() === id.toString())]);
+    } else {
+      setKeys(keys.filter(key => key.id.toString() !== id.toString()));
+    }
   };
 
   const handleFileInputChange = (event) => {
     const files = event.target.files;
-    setFormValues({
-      ...formValues,
-      files: files,
+    setFiles(files);
+  };
+  /*
+  const extractTextFromPDF = async (file) => {
+    const reader = new FileReader();
+
+    return new Promise((resolve, reject) => {
+      reader.onload = async (event) => {
+        const arrayBuffer = event.target.result;
+        const pdf = await pdfjs.getDocument(arrayBuffer).promise;
+        let text = '';
+
+        for (let pageNum = 1; pageNum <= pdf.numPages; pageNum++) {
+          const page = await pdf.getPage(pageNum);
+          const content = await page.getTextContent();
+          text += content.items.map((item) => item.str).join(' ');
+        }
+
+        resolve(text);
+      };
+
+      reader.onerror = (error) => reject(error);
+
+      reader.readAsArrayBuffer(file);
     });
   };
+
+  const extractTextFromDocx = async (file) => {
+    const reader = new FileReader();
+
+    return new Promise((resolve, reject) => {
+      reader.onload = async (event) => {
+        const arrayBuffer = event.target.result;
+        const result = await mammoth.extractRawText({ arrayBuffer });
+        resolve(result.value);
+      };
+
+      reader.onerror = (error) => reject(error);
+
+      reader.readAsArrayBuffer(file);
+    });
+  };
+  */ 
 
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
-      const formData = new FormData();
-      formData.append("title", formValues.title);
-      formData.append("semester", formValues.semester);
-      formData.append("ai1", formValues.ai1);
-      formData.append("ai2", formValues.ai2);
-      formData.append("ai3", formValues.ai3);
+      console.log({ title, keys, files, documents });
+      /* const documents = [];
+      for (let i = 0; i < files.length; i++) {
+        const file = files[i];
+        const reader = new FileReader();
+        reader.onload = async (e) => {
+          const content = e.target.result;
+          let document = { title, content: "" };
 
-      for (let i = 0; i < formValues.files.length; i++) {
-        formData.append("files", formValues.files[i]);
+          if (file.type === "application/pdf") {
+            const pdfData = await extractTextFromPDF(file);
+            document.content = pdfData.text;
+          } else {
+            const docxData = await await extractTextFromDocx(file);;
+            document.content = docxData.value;
+          }
+
+          documents.push(document);
+        };
+        reader.readAsArrayBuffer(file);
       }
-      const response = await fetch("http://localhost:3333/alpha/final/analysis", {
+      console.log(documents);
+      const headers = {
+        "Content-Type": "application/json",
+        "X-OAI-API-KEY": "tjldnmapye4fshxrg6b0i9czqv3ou51k"
+      };
+      const OriginalityResponse = await fetch("https://api.originality.ai/api/v1/scan/ai",{
         method: "POST",
+        headers: headers,
+        body: JSON.stringify({
+          "title": 1,
+          "content": documents
+        })
+      });
+      const OriginalityData = await OriginalityResponse.json();
+      console.log(OriginalityData);
+      
+      const response = await fetch("http://localhost:3333/beta/final/analysis", {
+        method: "POST",
+        body: JSON.stringify({
+          title,
+          keys,
+          documents
+        }),
         headers: {
-          // Add the content type header
-          "Content-Type": "multipart/form-data",
-        },
-        body: formData,
+          "Content-Type": "application/json"
+        }
       });
       const data = await response.json();
-      console.log(data);
-      // Handle the response data
+      console.log(data);*/
     } catch (error) {
       console.log(error);
     }
@@ -98,74 +162,30 @@ export default function FormAnalysis() {
               id="title"
               name="title"
               className="w-full px-3 py-2 border rounded-md focus:outline-none focus:border-blue-500"
-              value={formValues.title}
+              value={title}
               onChange={handleTitleChange}
             />
           </div>
 
-          <div className="mb-4 hidden">
-            <label className="block text-gray-600">Semestre</label>
-            <div>
-              <input
-                type="radio"
-                id="semester1"
-                name="semester"
-                value="Primer semestre"
-                checked={formValues.semester === "Primer semestre"}
-                onChange={handleSemesterChange}
-              />
-              <label htmlFor="semester1" className="ml-2">
-                Primer semestre
-              </label>
-            </div>
-            <div>
-              <input
-                type="radio"
-                id="semester2"
-                name="semester"
-                value="Segundo semestre"
-                checked={formValues.semester === "Segundo semestre"}
-                onChange={handleSemesterChange}
-              />
-              <label htmlFor="semester2" className="ml-2">
-                Segundo semestre
-              </label>
-            </div>
-          </div>
-
           <div className="mb-4">
             <label className="block text-gray-600">
-              Inteligencias artificiales
+              Llaves API
             </label>
-            {aiOptions.map((option) => (
+            {keyOptions.map((option) => (
               <div key={option.id}>
                 <input
                   type="checkbox"
                   id={option.id}
-                  name={`ai${option.id}`}
-                  value={option.name}
-                  checked={formValues[`ai${option.id}`]}
-                  onChange={handleAiChange}
+                  name={option.api_key}
+                  value={option.api_key}
+                  checked={keys.some(key => key.id.toString() === option.id.toString())}
+                  onChange={handleKeyChange}
                 />
                 <label htmlFor={option.id} className="ml-2">
-                  {option.name}
+                  {`${option.api_key} (${option.ai.name})`}
                 </label>
               </div>
             ))}
-          </div>
-
-          <div className="mb-4 hidden">
-            <label htmlFor="dropdownSelect" className="block text-gray-600">
-              Dropdown Options
-            </label>
-            <select
-              id="dropdownSelect"
-              name="dropdownSelect"
-              className="w-full px-3 py-2 border rounded-md focus:outline-none focus:border-blue-500"
-            >
-              <option value="Option 1">Option 1</option>
-              <option value="Option 2">Option 2</option>
-            </select>
           </div>
 
           <div className="mb-4">

@@ -11,7 +11,7 @@ function Keys() {
   useEffect(() => {
     async function fetchKeys() {
       try {
-        const response = await fetch("http://localhost:3333/alpha/final/key");
+        const response = await fetch("http://localhost:3333/beta/final/key");
         const data = await response.json();
         setKeys(data);
         console.log(data);
@@ -31,7 +31,7 @@ function Keys() {
 
   async function handleDelete(id) {
     try {
-      await fetch(`http://localhost:3333/alpha/final/key/${id}`, {
+      await fetch(`http://localhost:3333/beta/final/key/${id}`, {
         method: "DELETE",
       });
       setKeys(keys.filter((item) => item.id !== id));
@@ -70,6 +70,9 @@ function Keys() {
                     Código
                   </th>
                   <th scope="col" className="px-6 py-3">
+                    Correo
+                  </th>
+                  <th scope="col" className="px-6 py-3">
                     IA
                   </th>
                   <th scope="col" className="px-6 py-3">
@@ -82,6 +85,9 @@ function Keys() {
                   <tr key={item.id} className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
                     <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                       {item.api_key}
+                    </th>
+                    <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                      {item.api_email}
                     </th>
                     <td className="px-6 py-4">
                       {item.ai.name}
@@ -101,7 +107,6 @@ function Keys() {
                         )}
                       </div>
                     </td>
-
                   </tr>
                 ))}
               </tbody>

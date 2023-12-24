@@ -4,21 +4,20 @@ import { Link } from "react-router-dom";
 function Home() {
   return (
     <div>
-
       <div className="relative flex flex-col py-16 lg:pt-0 lg:flex-col lg:pb-0">
         <div className="border-y border-r-2 flex flex-col items-start w-full max-w-xl px-4 mx-auto lg:px-8 lg:max-w-screen-xl">
           <div className="mb-16 lg:my-40 lg:max-w-lg lg:pr-5">
             <div className="max-w-xl mb-6">
               <div>
                 <p className="inline-block px-3 py-px mb-4 text-xs font-semibold tracking-wider text-white uppercase rounded-full bg-red-500">
-                  Prueba de concepto (Alpha)
+                  Prueba de concepto
                 </p>
               </div>
               <h2 className="max-w-lg mb-6 font-sans text-4xl font-bold tracking-tight text-gray-900 sm:text-4xl sm:leading-none">
-                No quieres esto, ¿Verdad?
+                Un uso indeseados de las IAs, resuelto con IAs
               </h2>
               <p className="text-base text-justify text-gray-700 md:text-lg">
-                PoC AI Detector nace como prueba de concepto de un integrador múltiple de detectores de inteligencia artificial, cuyo propósito es revelar si tus alumnos utilizaron estas para resolver tus evaluaciones, sin mayor esfuerzo y con evidencia de por medio.
+                PoC AI Detector nace como prueba de concepto de un integrador múltiple de detectores de inteligencia artificial, cuyo principal objetivo es identificar si estas se utilizaron para resolver tus evaluaciones.
               </p>
             </div>
             <div className="flex flex-col items-center md:flex-row">
@@ -52,10 +51,10 @@ function Home() {
             <div className="flex flex-col justify-center space-y-8 text-center">
               <div className="space-y-2">
                 <h1 className="text-3xl font-bold tracking-tighter sm:text-5xl xl:text-6xl/none bg-clip-text text-transparent bg-gradient-to-r from-white to-gray-500">
-                  El uso de IA para resolver evaluaciones es un hecho, mas no tiene por qué ser un problema
+                  El uso de IAs para resolver evaluaciones es un problema creciente
                 </h1>
                 <p className="max-w-[720px] text-zinc-200 md:text-xl dark:text-zinc-100 mx-auto p-10">
-                  Este servicio no es un sustituto de tu criterio, pero sí una herramienta de referencia que te ayudará a detectar posibles casos de engaño.
+                  Este servicio no pretende ser un sustituto de tu criterio, pero sí una herramienta de referencia que te ayudará a detectar posibles casos de engaño.
                 </p>
               </div>
               <div className="w-full max-w-full space-y-4 mx-auto">
@@ -78,9 +77,9 @@ function Home() {
                         <path d="M5.45 5.11 2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z" />
                       </svg>
                     </div>
-                    <h2 className="text-xl font-bold text-white">Smart Inbox</h2>
+                    <h2 className="text-xl font-bold text-white">Actualizado a lo último en IA</h2>
                     <p className="text-zinc-200 dark:text-zinc-100">
-                      Our Smart Inbox feature helps you manage your emails efficiently by prioritizing important emails.
+                      Esta propuesta utiliza lo último en el estado de arte del área de NLP para la detección de IA.
                     </p>
                   </div>
                   <div className="flex flex-col items-center space-y-2 border-gray-800 p-4 rounded-lg">
@@ -102,10 +101,9 @@ function Home() {
                         <path d="m20 22-5-5" />
                       </svg>
                     </div>
-                    <h2 className="text-xl font-bold text-white">Seamless Integration</h2>
+                    <h2 className="text-xl font-bold text-white">Integración de terceros</h2>
                     <p className="text-zinc-200 dark:text-zinc-100">
-                      Seamless Integration allows you to connect with your favorite apps and services without leaving your
-                      inbox.
+                      Puedes integrar tus API Keys de detectores como CopyLeaks o Originality, y así robustizar el proceso de detección.
                     </p>
                   </div>
                   <div className="flex flex-col items-center space-y-2 border-gray-800 p-4 rounded-lg">
@@ -126,10 +124,9 @@ function Home() {
                         <circle cx="12" cy="12" r="3" />
                       </svg>
                     </div>
-                    <h2 className="text-xl font-bold text-white">Advanced Customization</h2>
+                    <h2 className="text-xl font-bold text-white">Proceso automatizado</h2>
                     <p className="text-zinc-200 dark:text-zinc-100">
-                      With Advanced Customization, you can personalize your email client to suit your preferences and work
-                      style.
+                    Provee al sistema de las API Keys de las IAs soportadas y de los documentos; Este se encargará de todo lo demás.
                     </p>
                   </div>
                   <div className="flex flex-col items-center space-y-2 border-gray-800 p-4 rounded-lg">

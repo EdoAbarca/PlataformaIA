@@ -13,7 +13,7 @@ function EditKey() {
     console.log(key);
     
     try {
-      const response = await fetch(`http://localhost:3333/alpha/final/key/${id}`, {
+      const response = await fetch(`http://localhost:3333/beta/final/key/${id}`, {
         method: "PATCH",
         headers: {
           "Content-Type": "application/json"

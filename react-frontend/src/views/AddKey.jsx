@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 function AddKey() {
 
   const [key, setKey] = useState("");
+  const [email, setEmail] = useState("");
   const [options, setOptions] = useState([]);
   const [selectedOption, setSelectedOption] = useState("");
 
@@ -11,7 +12,7 @@ function AddKey() {
     // Fetch data from API to get all IAs registered
     async function fetchData() {
       try {
-        const response = await fetch("http://localhost:3333/alpha/final/ai");
+        const response = await fetch("http://localhost:3333/beta/final/ai");
         const data = await response.json();
         setOptions(data);
       } catch (error) {
@@ -27,13 +28,14 @@ function AddKey() {
     const selectedAi = options.find(option => option.name === selectedOption);
     if (selectedAi) {
       const body = {
-        "ai_key":key,
-        "ai_id":selectedAi.id
+        "api_key": key,
+        "api_email": email,
+        "ai_id": selectedAi.id
       }
       console.log(body);
-      /* 
+      
       try {
-        const response = await fetch("http://localhost:3333/alpha/final/key", {
+        const response = await fetch("http://localhost:3333/beta/final/key", {
           method: "POST",
           headers: {
             "Content-Type": "application/json"
@@ -44,7 +46,7 @@ function AddKey() {
         console.log(data);
       } catch (error) {
         console.error(error);
-      }*/
+      }
     }
   }
 
@@ -57,9 +59,16 @@ function AddKey() {
             <input
               type="text"
               className="bg-gray-100 text-gray-900 border-0 rounded-md p-2 mb-4 focus:bg-gray-200 focus:outline-none focus:ring-1 focus:ring-blue-500 transition ease-in-out duration-150"
-              placeholder="Llave"
+              placeholder="Llave acceso (API Key)"
               value={key}
               onChange={(event) => setKey(event.target.value)}
+            />
+            <input
+              type="email"
+              className="bg-gray-100 text-gray-900 border-0 rounded-md p-2 mb-4 focus:bg-gray-200 focus:outline-none focus:ring-1 focus:ring-blue-500 transition ease-in-out duration-150"
+              placeholder="Correo de autenticación"
+              value={email}
+              onChange={(event) => setEmail(event.target.value)}
             />
             <select
               className="bg-gray-100 text-gray-900 border-0 rounded-md p-2 mb-4 focus:bg-gray-200 focus:outline-none focus:ring-1 focus:ring-blue-500 transition ease-in-out duration-150"

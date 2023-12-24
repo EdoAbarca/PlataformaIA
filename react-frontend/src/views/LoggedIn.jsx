@@ -18,7 +18,7 @@ function LoggedIn() {
   useEffect(() => {
     async function fetchAnalysis() {
       try {
-        const response = await fetch("http://localhost:3333/alpha/final/analysis");
+        const response = await fetch("http://localhost:3333/beta/final/analysis");
         const data = await response.json();
         setAnalysis(data);
         console.log(data);
@@ -32,7 +32,7 @@ function LoggedIn() {
 
   async function handleDocumentDelete(id) {
     try {
-      const response = await fetch(`http://localhost:3333/alpha/final/analysis/${id}`, {
+      const response = await fetch(`http://localhost:3333/beta/final/analysis/${id}`, {
         method: "DELETE"
       });
       const data = await response.json();

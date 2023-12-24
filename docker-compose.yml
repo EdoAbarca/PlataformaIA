@@ -1,5 +1,3 @@
-#Version actual docker-compose.yml
-
 version: "3.8"
 services:
   postgres:
@@ -39,6 +37,15 @@ services:
       - postgres
     networks:
       - ia_network
+  #llm:
+  #  image: docker.io/eddindocker/django-llm-api
+  #  container_name: llm
+  #  ports:
+  #    - "8000:8000"
+  #  depends_on:
+  #    - mongo
+  #  networks:
+  #    - ia_network
   
 networks:
   ia_network:

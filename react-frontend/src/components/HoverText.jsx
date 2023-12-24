@@ -14,7 +14,7 @@ export default function HoverElement() {
       <FontAwesomeIcon icon={faQuestion} bounce className="text-gray-700" />
       {showText && (
         <div className="absolute top-0 left-full ml-2 mt-1 bg-gray-800 text-white px-2 py-1 rounded-lg">
-          <p className="text-sm font-medium">Default text</p>
+          <p className="text-sm font-medium">Acá se mostrarán los análisis realizados.</p>
         </div>
       )}
     </div>
