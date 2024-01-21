@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Link, useParams, useLocation } from "react-router-dom";
 
 function EditKey() {
+  //Descartado
   //const navigate = useNavigate();
   const { id } = useParams();
   const [key, setKey] = useState("");

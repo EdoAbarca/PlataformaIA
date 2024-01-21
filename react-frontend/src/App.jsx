@@ -10,6 +10,7 @@ import AddKey from './views/AddKey.jsx'
 import EditKey from './views/EditKey.jsx'
 import NotFound from './views/NotFound.jsx'
 import Navbar from './components/Navbar.jsx';
+import Tags from './views/Tags.jsx'
 import FAQ from './views/FAQ.jsx'
 
 function App() {
@@ -23,11 +24,12 @@ function App() {
           <Route path='/register' element={<Register />} />
           <Route path='/loggedin' element={<LoggedIn />} />
           <Route path='/analysis/:id' element={<Analysis />} />
-          <Route path='/analysis-form' element={<FormAnalysis />} />
+          <Route path='/analysis/form' element={<FormAnalysis />} />
           <Route path='/keys' element={<Keys />} />
           <Route path='/keys/add' element={<AddKey/>}/>
           <Route path='/keys/edit/:id' element={<EditKey/>}/>
           <Route path="/faq" element={<FAQ />} />
+          <Route path="/tags" element={<Tags />}/>
           <Route path='*' element={<NotFound />} />
         </Routes>
       </Router>

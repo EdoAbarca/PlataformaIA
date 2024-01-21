@@ -22,17 +22,18 @@ model User {
   @@map("users")
 }
 
-model Role { //Propenso a ser descartado
-  id   Int    @id @default(autoincrement())
-  role String @unique
+//model Role { 
+  //id   Int    @id @default(autoincrement())
+  //role String @unique
 
   //users     User[]
-  @@map("roles")
-}
+  //@@map("roles")
+//}
 
 model AI {
   id      Int      @id @default(autoincrement())
   name    String
+  is_free Boolean
   keys    Key[]
   results Result[]
 
@@ -42,19 +43,22 @@ model AI {
 model Key {
   id        Int    @id @default(autoincrement())
   api_key   String
-  api_email String
   ai        AI     @relation(fields: [ai_id], references: [id], onDelete: Cascade)
   ai_id     Int
-
+  //user     User   @relation(fields: [user_id], references: [id], onDelete: NoAction)
+  //user_id  Int
   @@map("keys")
 }
 
 model Analysis {
   id        Int        @id @default(autoincrement())
-  created   DateTime   @default(now()) @db.Date
+  created   DateTime   @default(now()) @db.Date //A reemplazar
+  //created String
   title     String
   documents Document[]
   tags      Tag[]
+  //user     User   @relation(fields: [user_id], references: [id], onDelete: NoAction)
+  //user_id  Int
 
   @@map("analysis")
 }
@@ -70,11 +74,11 @@ model Document {
 }
 
 model Result {
-  id        Int      @id @default(autoincrement())
-  created   DateTime @default(now())
-  ia_score  Int //Float?
-  ia_result String
-
+  id          Int      @id @default(autoincrement())
+  created     DateTime @default(now())
+  ai_score    Float
+  ai_result   String
+  //ai_made     Boolean
   ai          AI       @relation(fields: [ai_id], references: [id], onDelete: Cascade)
   ai_id       Int
   document    Document @relation(fields: [document_id], references: [id], onDelete: Cascade)
@@ -87,6 +91,15 @@ model Tag {
   id        Int      @id @default(autoincrement())
   name      String
   analyses  Analysis[]
-
+  //user     User   @relation(fields: [user_id], references: [id], onDelete: NoAction)
+  //user_id  Int
   @@map("tags")
 }
+
+//model IAText {
+  //id        Int      @id @default(autoincrement())
+  //text      String
+  //result    Result       @relation(fields: [result_id], references: [id], onDelete: Cascade)
+  //result_id     Int
+
+  //@@map("iatexts")

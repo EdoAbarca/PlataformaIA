@@ -7,11 +7,11 @@ import {
 export class EditResultDto{
     @IsOptional()
     @IsInt()
-    ia_score: number;
+    ai_score: number;
 
     @IsOptional()
     @IsString()
-    ia_result: string;
+    ai_result: string;
 
     @IsOptional()
     @IsInt()

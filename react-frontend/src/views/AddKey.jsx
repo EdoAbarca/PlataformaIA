@@ -12,7 +12,7 @@ function AddKey() {
     // Fetch data from API to get all IAs registered
     async function fetchData() {
       try {
-        const response = await fetch("http://localhost:3333/beta/final/ai");
+        const response = await fetch("http://localhost:3333/beta/final/ai/paid");
         const data = await response.json();
         setOptions(data);
       } catch (error) {
@@ -54,7 +54,7 @@ function AddKey() {
     <div>
       <div className="flex flex-col items-center justify-center h-screen">
         <div className="w-full max-w-md bg-white rounded-lg shadow-md p-6">
-          <h2 className="text-2xl font-bold text-gray-900 mb-4">Agregar llave de acceso</h2>
+          <h2 className="text-2xl font-bold text-gray-900 mb-4">Agregar API Key</h2>
           <form className="flex flex-col">
             <input
               type="text"
@@ -62,13 +62,6 @@ function AddKey() {
               placeholder="Llave acceso (API Key)"
               value={key}
               onChange={(event) => setKey(event.target.value)}
-            />
-            <input
-              type="email"
-              className="bg-gray-100 text-gray-900 border-0 rounded-md p-2 mb-4 focus:bg-gray-200 focus:outline-none focus:ring-1 focus:ring-blue-500 transition ease-in-out duration-150"
-              placeholder="Correo de autenticación"
-              value={email}
-              onChange={(event) => setEmail(event.target.value)}
             />
             <select
               className="bg-gray-100 text-gray-900 border-0 rounded-md p-2 mb-4 focus:bg-gray-200 focus:outline-none focus:ring-1 focus:ring-blue-500 transition ease-in-out duration-150"

@@ -17,4 +17,11 @@ export class UserController {
     getMe(@GetUser() user: User) {
         return user;
     }
+
+    /*
+    @Patch()
+    changePassword(@Body() password: string) {
+        return this.userService.changePassword(password);
+    }
+    */
 }

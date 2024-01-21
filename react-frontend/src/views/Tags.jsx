@@ -1,14 +1,14 @@
-//MODIFICAR PARA QUE SEA UNA TABLA CON TODOS LOS TAGS
-
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faListUl } from "@fortawesome/free-solid-svg-icons";
-//import { faListUl, faExclamation } from "@fortawesome/free-solid-svg-icons";
-import HoverText from "../components/HoverText.jsx";
+import { faTrash, faTrashCan } from "@fortawesome/free-solid-svg-icons";
+import HoverText from "../components/HoverText";
+import Modal from "../components/Modal.jsx";
 
 function Tags() {
   const [tags, setTags] = useState(null);
+  const [open, setOpen] = useState(false);
+  const [selectedId, setSelectedId] = useState(null);
 
   useEffect(() => {
     async function fetchTags() {
@@ -25,18 +25,12 @@ function Tags() {
     fetchTags();
   }, []);
 
-  const handleMenuClick = (index) => {
-    const newTags = [...tags];
-    newTags[index].showMenu = !newTags[index].showMenu;
-    setTags(newTags);
-  };
-
   async function handleDelete(id) {
     try {
       await fetch(`http://localhost:3333/beta/final/tag/${id}`, {
         method: "DELETE",
       });
-      setTags(Tags.filter((item) => item.id !== id));
+      setTags(tags.filter((item) => item.id !== id));
     } catch (error) {
       console.log(error);
     }
@@ -48,7 +42,7 @@ function Tags() {
         <div className="bg-white px-4 py-4 md:px-8 md:py-7 xl:px-10">
           <div className="flex items-center">
             <h1 className="font-bold text-5xl my-2">Tags</h1>
-            <HoverText />
+            <HoverText text="Las categorías son palabras claves que buscan mejorar la distinción y clasificación de los distintos análisis." width={375} />
             <div className="ml-auto">
               <Link to={"/tags/add"}>
                 <button className="rounded-xl mt-4 mx-4 px-6 py-3 bg-white text-green-500 border border-green-500 transform ease-in-out duration-500 hover:bg-green-500 hover:text-white sm:mt-0">
@@ -84,19 +78,28 @@ function Tags() {
                     </th>
                     <td className="px-6 py-4 text-right">
                       <div className="relative">
-                        <button onClick={() => handleMenuClick(index)} className="text-white font-bold bg-blue-600 dark:bg-blue-500 hover:bg-blue-700 rounded-full px-3 py-2">
-                          <FontAwesomeIcon icon={faListUl} beat/>
+                        <button onClick={() => { setOpen(true); setSelectedId(item.id) }} className="text-white font-bold bg-red-600 hover:bg-red-700 rounded-full px-3 py-2">
+                          <FontAwesomeIcon icon={faTrash} beat />
                         </button>
-                        {item.showMenu && (
-                          <div className="fixed right-0 mt-2 w-auto bg-white rounded-md overflow-hidden shadow-xl z-10">
-                            <button onClick={() => handleDelete(item.id)} className="block px-4 py-2 text-sm text-gray-700 hover:bg-red-500 hover:text-gray-900">Eliminar</button>
-                          </div>
-                        )}
                       </div>
                     </td>
-
                   </tr>
                 ))}
+                {selectedId && (
+                  <Modal open={open} onClose={() => setOpen(false)} className="flex items-center justify-center min-h-screen">
+                    <div className="text-center w-56">
+                      <FontAwesomeIcon icon={faTrashCan} size="xl" className="mx-auto text-red-500" />
+                      <div className="mx-auto my-4 w-48">
+                        <h3 className="text-lg font-black text-gray-800">¿Estás segur@?</h3>
+                        <p className="text-sm text-gray-500">Esta acción es irreversible</p>
+                      </div>
+                      <div className="flex gap-4">
+                        <button onClick={() => {handleDelete(selectedId);setOpen(false)}} className="w-full bg-red-500 shadow-red-400/40 text-white flex gap-2 items-center justify-center py-2 px-4 font-semibold shadow-md rounded-xl">Eliminar</button>
+                        <button className="w-full border bg-white flex gap-2 items-center justify-center py-2 px-4 font-semibold shadow-md rounded-xl" onClick={() => setOpen(false)}>Volver</button>
+                      </div>
+                    </div>
+                  </Modal>
+                )}
               </tbody>
             </table>
           </div>

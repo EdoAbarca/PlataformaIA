@@ -7,11 +7,11 @@ import {
 export class CreateResultDto {
     @IsInt()
     @IsNotEmpty()
-    ia_score: number;
+    ai_score: number;
 
     @IsString()
     @IsNotEmpty()
-    ia_result: string;
+    ai_result: string;
 
     @IsInt()
     @IsNotEmpty()

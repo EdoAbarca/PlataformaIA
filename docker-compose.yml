@@ -6,6 +6,8 @@ services:
     restart: always
     env_file:
       - ./nest-backend/.env
+    environment:
+      TZ: "America/Santiago"
     ports:
       - "5432:5432"
     networks:
@@ -13,9 +15,6 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql/data
   backend:
-    #build:
-    #  context: ./nest-backend
-    #  dockerfile: Dockerfile
     image: docker.io/eddindocker/nest-backend
     ports:
       - "3333:3333"
@@ -26,9 +25,6 @@ services:
     env_file:
       - ./nest-backend/.env
   frontend:
-    #build:
-    #  context: ./react-frontend
-    #  dockerfile: Dockerfile
     image: docker.io/eddindocker/react-frontend
     ports:
       - "5173:5173"
@@ -37,16 +33,28 @@ services:
       - postgres
     networks:
       - ia_network
-  #llm:
-  #  image: docker.io/eddindocker/django-llm-api
-  #  container_name: llm
+  #fast-detect-gpt:
+  #  image: docker.io/eddindocker/fast-detect-gpt
+  #  container_name: fast-detect-gpt
   #  ports:
-  #    - "8000:8000"
-  #  depends_on:
-  #    - mongo
+  #    - "8001:8001"
   #  networks:
   #    - ia_network
-  
+  #lm-watermarking:
+  #  image: docker.io/eddindocker/lm-watermarking
+  #  container_name: lm-watermarking
+  #  ports:
+  #    - "8002:8002"
+  #  networks:
+  #    - ia_network
+  #finetuned-debertav3:
+  #  image: docker.io/eddindocker/finetuned-debertav3
+  #  container_name: finetuned-debertav3
+  #  ports:
+  #    - "8003:8003"
+  #  networks:
+  #    - ia_network
+
 networks:
   ia_network:
 

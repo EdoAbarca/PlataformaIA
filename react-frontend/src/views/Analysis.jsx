@@ -10,10 +10,12 @@ export default function Analysis() {
   useEffect(() => {
     async function fetchAnalysis() {
       try {
-        const response = await fetch(`http://localhost:3333/alpha/final/analysis/${id}`);
+        const response = await fetch(`http://localhost:3333/beta/final/analysis/${id}`);
         const data = await response.json();
         console.log(data);
-        setDocuments(data);
+        const docs = data.documents;
+        console.log(docs);
+        setDocuments(docs);
         console.log(state);
         console.log(analysisTitle);
       } catch (error) {
@@ -23,7 +25,6 @@ export default function Analysis() {
 
     fetchAnalysis();
   }, [id]);
-
   return (
     <div>
       <div className="w-full sm:px-6">
@@ -49,7 +50,7 @@ export default function Analysis() {
                   {document.results.map((result) => (
                     <div key={result.id} id="row row1" className="mt-6 flex justify-between">
                     <div id="item" className="flex-grow pt-1 text-center text-indigo-800">
-                      <span id="big-text" className="block">{result.ia_score}%</span>
+                      <span id="big-text" className="block">{result.ai_score}%</span>
                       <span id="regular-text" className="text-xs">{result.ai.name}</span>
                     </div>
                   </div>

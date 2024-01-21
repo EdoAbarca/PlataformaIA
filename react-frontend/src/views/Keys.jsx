@@ -1,12 +1,14 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faListUl } from "@fortawesome/free-solid-svg-icons";
-//import { faListUl, faExclamation } from "@fortawesome/free-solid-svg-icons";
-import HoverText from "../components/HoverText.jsx";
+import { faTrash, faTrashCan } from "@fortawesome/free-solid-svg-icons";
+import  HoverText  from "../components/HoverText.jsx";
+import Modal from "../components/Modal.jsx";
 
 function Keys() {
   const [keys, setKeys] = useState(null);
+  const [open, setOpen] = useState(false);
+  const [selectedId, setSelectedId] = useState(null);
 
   useEffect(() => {
     async function fetchKeys() {
@@ -22,12 +24,6 @@ function Keys() {
 
     fetchKeys();
   }, []);
-
-  const handleMenuClick = (index) => {
-    const newKeys = [...keys];
-    newKeys[index].showMenu = !newKeys[index].showMenu;
-    setKeys(newKeys);
-  };
 
   async function handleDelete(id) {
     try {
@@ -45,8 +41,8 @@ function Keys() {
       <div className="w-full sm:px-6">
         <div className="bg-white px-4 py-4 md:px-8 md:py-7 xl:px-10">
           <div className="flex items-center">
-            <h1 className="font-bold text-5xl my-2">Llaves</h1>
-            <HoverText />
+            <h1 className="font-bold text-5xl my-2">API Keys</h1>
+            <HoverText text="Las API Keys son códigos alfanuméricos, necesarios para acceder a los servicios de Originality y ChatGPT (GPT-4). En caso de dudas, ver FAQ." width={375} />
             <div className="ml-auto">
               <Link to={"/keys/add"}>
                 <button className="rounded-xl mt-4 mx-4 px-6 py-3 bg-white text-green-500 border border-green-500 transform ease-in-out duration-500 hover:bg-green-500 hover:text-white sm:mt-0">
@@ -70,9 +66,6 @@ function Keys() {
                     Código
                   </th>
                   <th scope="col" className="px-6 py-3">
-                    Correo
-                  </th>
-                  <th scope="col" className="px-6 py-3">
                     IA
                   </th>
                   <th scope="col" className="px-6 py-3">
@@ -81,34 +74,38 @@ function Keys() {
                 </tr>
               </thead>
               <tbody>
-                {keys && keys.map((item, index) => (
+                {keys && keys.map((item) => (
                   <tr key={item.id} className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
                     <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                       {item.api_key}
-                    </th>
-                    <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                      {item.api_email}
                     </th>
                     <td className="px-6 py-4">
                       {item.ai.name}
                     </td>
                     <td className="px-6 py-4 text-right">
                       <div className="relative">
-                        <button onClick={() => handleMenuClick(index)} className="text-white font-bold bg-blue-600 dark:bg-blue-500 hover:bg-blue-700 rounded-full px-3 py-2">
-                          <FontAwesomeIcon icon={faListUl} beat/>
+                        <button onClick={() => { setOpen(true); setSelectedId(item.id) }} className="text-white font-bold bg-red-600 hover:bg-red-700 rounded-full px-3 py-2">
+                          <FontAwesomeIcon icon={faTrash} beat />
                         </button>
-                        {item.showMenu && (
-                          <div className="fixed right-0 mt-2 w-auto bg-white rounded-md overflow-hidden shadow-xl z-10">
-                            <Link to={`/keys/edit/${item.id}`} state={{item}}>
-                              <button className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900">Editar</button>
-                            </Link>
-                            <button onClick={() => handleDelete(item.id)} className="block px-4 py-2 text-sm text-gray-700 hover:bg-red-500 hover:text-gray-900">Eliminar</button>
-                          </div>
-                        )}
                       </div>
                     </td>
                   </tr>
                 ))}
+                {selectedId && (
+                  <Modal open={open} onClose={() => setOpen(false)} className="flex items-center justify-center min-h-screen">
+                    <div className="text-center w-56">
+                      <FontAwesomeIcon icon={faTrashCan} size="xl" className="mx-auto text-red-500" />
+                      <div className="mx-auto my-4 w-48">
+                        <h3 className="text-lg font-black text-gray-800">¿Estás segur@?</h3>
+                        <p className="text-sm text-gray-500">Esta acción es irreversible</p>
+                      </div>
+                      <div className="flex gap-4">
+                        <button onClick={() => {handleDelete(selectedId);setOpen(false)}} className="w-full bg-red-500 shadow-red-400/40 text-white flex gap-2 items-center justify-center py-2 px-4 font-semibold shadow-md rounded-xl">Eliminar</button>
+                        <button className="w-full border bg-white flex gap-2 items-center justify-center py-2 px-4 font-semibold shadow-md rounded-xl" onClick={() => setOpen(false)}>Volver</button>
+                      </div>
+                    </div>
+                  </Modal>
+                )}
               </tbody>
             </table>
           </div>

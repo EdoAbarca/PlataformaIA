@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-
+//Al ultimo
 export default function FAQ() {
   const navigate = useNavigate();
   return (

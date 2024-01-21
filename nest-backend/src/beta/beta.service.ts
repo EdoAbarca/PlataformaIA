@@ -1,14 +1,15 @@
 import { HttpException, Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
-import { PDFLoader } from "langchain/document_loaders/fs/pdf";
-import { HttpStatus, Res } from '@nestjs/common';
-import { Response } from 'express';
+import * as mammoth from 'mammoth';
+import * as pdf from 'pdf-parse';
+import { HttpStatus } from '@nestjs/common';
+import { Key } from '@prisma/client';
 
 @Injectable()
 export class BetaService {
   constructor(private prisma: PrismaService) { }
 
-  async getAnalysis() {
+  async getAnalyses() {
     return await this.prisma.analysis.findMany({
       include: {
         documents: true
@@ -16,15 +17,19 @@ export class BetaService {
     });
   }
 
-  async getAnalysisDocs(analysis_id: number) {
-    return await this.prisma.document.findMany({
+  async getAnalysis(id: number) {
+    return await this.prisma.analysis.findUnique({
       where: {
-        analysis_id: analysis_id
+        id: id
       },
       include: {
-        results: {
+        documents:{
           include: {
-            ai: true
+            results: {
+              include: {
+                ai: true
+              }
+            }
           }
         }
       }
@@ -36,7 +41,6 @@ export class BetaService {
     return await this.prisma.key.create({
       data: {
         api_key: body.body.api_key,
-        api_email: body.body.api_email,
         ai_id: body.body.ai_id
       }
     });
@@ -73,47 +77,37 @@ export class BetaService {
     return await this.prisma.aI.findMany();
   }
 
+  async getFreeAIs() {
+    return await this.prisma.aI.findMany({
+      where: {
+        is_free: true
+      }
+    });
+  }
+
+  async getPaidAIs() {
+    const paidAIs = await this.prisma.aI.findMany({
+      where: {
+        is_free: false
+      },
+      include: {
+        keys: true //Despues hay que verificar que la key sea del usuario
+      }
+    });
+
+    return paidAIs.filter(ai => ai.keys.length > 0);
+  }
+
+  async getTags() {
+    return await this.prisma.tag.findMany();
+  }
+
   async deleteAnalysis(id: number) {
     return await this.prisma.analysis.delete({
       where: {
         id: id
       }
     });
-  }
-
-  async createAnalysis(body: any) { 
-    
-    /*
-    {
-      title: "Analysis 1",
-      documents: [{
-        title: "doc1",
-        results: [{
-          ia_score: 65,
-          ia_result: "Partly built by AI",
-          ai_id: 1,
-        },
-        {
-          ia_score: 90,
-          ia_result: "Mostly AI",
-          ai_id: 2,
-        },
-        {
-          ia_score: 100,
-          ia_result: "AI written",
-          ai_id: 3,
-        }]
-      }]
-    }
-    */
-    console.log(body);
-
-    return await this.prisma.analysis.create({
-      data: {
-        title: body.title,
-      }
-    });
-    
   }
 
   async cascadeCleanDatabase() {
@@ -124,19 +118,22 @@ export class BetaService {
   async insertBaseData() { //A automatizar en un SQL (y docker)
     try {
       //Base data
-      await this.prisma.aI.create({ data: { name: 'PoC AI' } });
-      await this.prisma.aI.create({ data: { name: 'CopyLeaks' } }); //F
-      await this.prisma.aI.create({ data: { name: 'Originality' } });
-      
-      
-      
-      //Temporal data
-      let ai1 = await this.prisma.aI.findFirst({ where: { name: 'PoC AI' } });
-      let ai2 = await this.prisma.aI.findFirst({ where: { name: 'CopyLeaks' } });
-      let ai3 = await this.prisma.aI.findFirst({ where: { name: 'Originality' } });
-      await this.prisma.key.create({ data: { api_key: "1234567890", api_email: "ejemail1@gmail.com", ai_id: ai2.id } });
-      await this.prisma.key.create({ data: { api_key: "0987654321", api_email: "ejemail2@gmail.com", ai_id: ai3.id } });
+      await this.prisma.aI.create({ data: { name: 'Originality', is_free: false } });
+      await this.prisma.aI.create({ data: { name: 'ChatGPT (GPT-4)', is_free: false  } });
+      await this.prisma.aI.create({ data: { name: 'Fast Detect GPT', is_free: true  } });
+      await this.prisma.aI.create({ data: { name: 'Lm Watermarking', is_free: true  } });
+      await this.prisma.aI.create({ data: { name: 'PoC AI Detector', is_free: true  } });
 
+
+      //Temporal data
+      let ai1 = await this.prisma.aI.findFirst({ where: { name: 'Originality' } });
+      let ai2 = await this.prisma.aI.findFirst({ where: { name: 'ChatGPT (GPT-4)' } });
+      let ai3 = await this.prisma.aI.findFirst({ where: { name: 'Fast Detect GPT' } });
+      let ai4 = await this.prisma.aI.findFirst({ where: { name: 'Lm Watermarking' } });
+      let ai5 = await this.prisma.aI.findFirst({ where: { name: 'PoC AI Detector' } });
+      await this.prisma.key.create({ data: { api_key: "1234567890", ai_id: ai1.id } });
+      await this.prisma.key.create({ data: { api_key: "0987654321", ai_id: ai2.id } });
+      
       await this.prisma.analysis.create({
         data: {
           title: "Analysis 1",
@@ -147,19 +144,19 @@ export class BetaService {
                 results: {
                   create: [
                     {
-                      ia_score: 65,
-                      ia_result: "Partly built by AI",
+                      ai_score: 65,
+                      ai_result: "Partly built by AI",
                       ai_id: ai1.id,
                     },
                     {
-                      ia_score: 90,
-                      ia_result: "Mostly AI",
+                      ai_score: 90,
+                      ai_result: "Mostly AI",
                       ai_id: ai2.id,
                     },
                     {
-                      ia_score: 100,
-                      ia_result: "AI written",
-                      ai_id: ai3.id,
+                      ai_score: 100,
+                      ai_result: "AI written",
+                      ai_id: ai5.id,
                     }
                   ]
                 }
@@ -169,19 +166,19 @@ export class BetaService {
                 results: {
                   create: [
                     {
-                      ia_score: 30,
-                      ia_result: "Some AI",
+                      ai_score: 30,
+                      ai_result: "Some AI",
                       ai_id: ai1.id,
                     },
                     {
-                      ia_score: 12,
-                      ia_result: "Likely human",
+                      ai_score: 12,
+                      ai_result: "Likely human",
                       ai_id: ai2.id,
                     },
                     {
-                      ia_score: 5,
-                      ia_result: "Human written",
-                      ai_id: ai3.id,
+                      ai_score: 5,
+                      ai_result: "Human written",
+                      ai_id: ai5.id,
                     }
                   ]
                 }
@@ -190,7 +187,7 @@ export class BetaService {
           }
         }
       });
-      
+
     } catch (error) {
       throw new HttpException('Error: ' + error, HttpStatus.BAD_REQUEST);
     }
@@ -231,7 +228,7 @@ export class BetaService {
       console.log('Error: ', err);
     });
   }
-
+  /* 
   async parseTesisDoc(res: Response) {
     try {
       const loader = new PDFLoader("./tesis.pdf", {
@@ -242,5 +239,196 @@ export class BetaService {
     } catch (error) {
       throw new HttpException('Error: ' + error, HttpStatus.BAD_REQUEST);
     }
+  }*/
+  // Sub funciones para proceso analisis
+  // Extraer textos de documentos
+  async extractTexts(docs: any) {
+    console.log(docs);
+    let texts = [];
+    let texts_200 = [];
+    
+    try {
+      const start_ext_text = performance.now();
+      for (let i = 0; i < docs.length; i++) {
+        let title = docs[i].originalname;
+        let text = "";
+        if (docs[i].mimetype === "application/pdf") { //Archivo es PDF
+          console.log("Archivo " + i + ": PDF");
+          try {
+            console.log("Iniciado proceso de extracción de texto PDF...");
+            const data = await pdf(docs[i].buffer);
+            console.log("Texto extraido:");
+            text = data.text;
+            const doc = {title: title, text: text};
+            //console.log(text);
+            texts.push(doc);
+          } catch (error) {
+            throw new HttpException('Failed to extract text '+i+' from PDF. Error: '+error, HttpStatus.INTERNAL_SERVER_ERROR);
+          }
+          console.log(pdf);
+        } else { //Archivo es DOCX
+          console.log("Archivo " + i + ": DOCX"); 
+          try {
+            const result = await mammoth.extractRawText({ buffer: docs[i].buffer });
+            //console.log(result);
+            text = result.value;
+            //console.log(text);
+            const doc = {title: title, text: text};
+            texts.push(doc);
+          } catch (error) {
+            throw new HttpException('Failed to extract text '+i+' from DOCX. Error: '+error, HttpStatus.INTERNAL_SERVER_ERROR);
+          }
+        }
+      }
+      const end_ext_text = performance.now();
+      console.log("Tiempo de extracción de texto: "+(end_ext_text-start_ext_text)+" ms.");
+      
+      //Verificar primero si modelo fue seleccionado	
+      //Preprocesamiento adicional para modelo PoC (Dividir cada texto en pedazos de 200 palabras)
+      const start_divide_text = performance.now();
+      for (let i = 0; i < texts.length; i++) {
+        const title = texts[i].title;
+        let text_200 = [];
+        const words = texts[i].text.split(' ');
+        let chunk = '';
+        let chunkCount = 0;
+        for (let j = 0; j < words.length; j++) {
+          chunk += words[j] + ' ';
+          chunkCount++;
+          if (chunkCount === 200 || j === words.length - 1) {
+            text_200.push(chunk.trim());
+            chunk = '';
+            chunkCount = 0;
+          }
+        }
+        const doc = {title: title, text: text_200};
+        texts_200.push(doc);
+      }
+      const end_divide_text = performance.now();
+      console.log("Tiempo de dividir texto: "+(end_divide_text-start_divide_text)+" ms.");
+      const response = {
+        texts: texts,
+        texts_200: texts_200,
+        time: (end_divide_text-start_ext_text),
+      }
+      return response;
+    } catch (error) {
+      console.log(error);
+      throw new HttpException('Error: ' + error, HttpStatus.BAD_REQUEST);
+    }
+  }
+
+  async verifyOriginality(api_key: string) {
+    return fetch("https://api.originality.ai/api/v1/account/credits/balance",{
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        "X-OAI-API-KEY": api_key
+      }
+    });
+  }
+
+  async verifyChatGPT(api_key: string) {
+    return fetch("https://api.openai.com/v1/chat/completions",{
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": "Bearer "+api_key
+      },
+      body: JSON.stringify({
+        model: "gpt-4",
+        messages: [{role: "user", content: "Hi!"}],
+        max_tokens: 5,
+      }),
+    });
+  }
+
+  async detectAIServiceOriginality(body: any){
+    return fetch("https://api.originality.ai/api/v1/scan/ai",{
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "X-OAI-API-KEY": body.api_key
+      },
+      body: JSON.stringify({
+        "title": body.title,
+        "content": body.text,
+      })
+    });
+  }
+
+  async detectAIServiceChatGPT(body: any){
+    const prompt = 'Quiero que actúes como un clasificador de texto experto en detección de IA. Te daré un texto, el cual clasificarás. Quiero que la salida esté en formato JSON, y sus campos sean el porcentaje de texto analizado que fué creado por IA ("ai_score"), la etiqueta de clasificación ("Human" si "ai_score" < 50, "AI" caso contrario) ("label") y quiero que almacenes en un arreglo los extractos del texto que crees fue hecho con IA ("ai_texts"). Aquí está el texto:';
+    return fetch("https://api.openai.com/v1/chat/completions",{
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": "Bearer "+body.api_key
+      },
+      body: JSON.stringify({
+        "model": "gpt-4",
+        "messages": [
+        {
+            "role": "user",
+            "content": prompt+body.text
+        }
+        ]
+      }),
+    });
+  }
+
+  async detectAIServiceFastDetectGPT(body: any){
+    return fetch("http://localhost:8000/api/detect/fast-detect-gpt",{
+      method: "POST",
+      body: JSON.stringify({
+        "text": body.text,
+      })
+    });
+  }
+
+  async detectAIServiceLmWatermarking(body: any){
+    return fetch("http://localhost:8000/api/detect/lm-watermarking",{
+      method: "POST",
+      body: JSON.stringify({
+        "text": body.text,
+      })
+    });
+  }
+
+  async detectAIServicePoC(body: any){
+    return fetch("http://localhost:8000/api/detect/poc",{
+      method: "POST",
+      body: JSON.stringify({
+        "text": body.text,
+      })
+    });
+  }
+
+  async createResult(body: any) {
+    console.log(body);
+    return await this.prisma.result.create({
+      data: {
+        ai_score: body.ai_score,
+        ai_result: body.ai_result,
+        ai_id: body.ai_id,
+        document_id: body.document_id
+      }
+    });
+  }
+
+  async createAnalysis(body: any) {
+    console.log(body);
+    let ids = [];
+    for (let i = 0; i < body.tags.length; i++) {
+      ids.push(body.tags[i].id);
+    }
+    return await this.prisma.analysis.create({
+      data: {
+        title: body.title,
+        tags: {
+          connect: ids.map((id) => ({id: id})),
+        }
+      }
+    });
   }
 }
