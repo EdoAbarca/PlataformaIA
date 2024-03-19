@@ -1,35 +1,49 @@
 import { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
-function AddTag() {
-
+export default function AddTag() {
   const [tag, setTag] = useState("");
+  const [formPass, setFormPass] = useState(false);
+  const [tags, setTags] = useState([]);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    fetch("http://localhost:3333/beta/final/tag")
+      .then((response) => response.json())
+      .then((data) => setTags(data))
+      .catch((error) => console.log(error));
+  }, []);
+
+  function goBack() {
+    navigate("/tags");
+  }
+
+  useEffect(() => {
+    const tagPass = tag.length > 0;
+    const nameTagPass = !tags.find((item) => item.name === tag);
+    setFormPass(tagPass && nameTagPass);
+  }, [tag, tags]);
 
   async function handleSubmit(event) {
     event.preventDefault();
-
-    // Fetch all tags
     try {
-      const response = await fetch("http://localhost:3333/beta/final/tag");
-      const data = await response.json();
 
-      // Check if the input doesn't equal any tag name retrieved
-      const tagExists = data.some((tagData) => tagData.name === tag);
-      if (!tagExists) {
+      if (formPass) {
         // Perform the desired action when the tag doesn't exist
-        console.log("Tag doesn't exist");
+        console.log("Tag doesn't exist, proceed to create it");
         const response = await fetch("http://localhost:3333/beta/final/tag", {
           method: "POST",
           headers: {
             "Content-Type": "application/json"
           },
-          body: JSON.stringify({ tag:tag })
+          body: JSON.stringify({ name: tag })
         });
         const data = await response.json();
         console.log(data);
+        goBack();
       } else {
         // Perform the desired action when the tag already exists
-        console.log("Tag already exists");
+        console.log("Tag already exists or is empty");
       }
     } catch (error) {
       console.error(error);
@@ -40,7 +54,7 @@ function AddTag() {
     <div>
       <div className="flex flex-col items-center justify-center h-screen">
         <div className="w-full max-w-md bg-white rounded-lg shadow-md p-6">
-          <h2 className="text-2xl font-bold text-gray-900 mb-4">Agregar etiqueta</h2>
+          <h2 className="text-2xl font-bold text-gray-900 mb-4">Agregar categoría</h2>
           <form className="flex flex-col">
             <input
               type="text"
@@ -52,12 +66,15 @@ function AddTag() {
             <button
               type="submit"
               onClick={handleSubmit}
-              disabled={!selectedOption}
-              className="font-bold py-2 px-4 rounded-xl mt-4 text-green-500 border border-green-500 bg-white transition ease-in-out duration-500 hover:bg-green-500 hover:text-white"
+              className={`w-full py-2 border rounded-xl ${formPass ? "border-green-500 bg-white text-green-500 transition duration-500 ease-in-out hover:bg-green-500 hover:text-white" : "border-gray-300 bg-gray-300 text-gray-500"}`}
+              disabled={!formPass}
             >
               Crear
             </button>
-            <Link to={"/keys"} className="text-black py-2 px-4 mt-4 rounded-xl border border-black text-center font-semibold">
+            <Link
+              to={"/tags"}
+              className="text-black py-2 px-4 mt-4 rounded-xl border border-black text-center font-semibold"
+            >
               Volver
             </Link>
           </form>
@@ -66,5 +83,3 @@ function AddTag() {
     </div>
   );
 }
-
-export default AddTag;

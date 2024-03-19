@@ -21,12 +21,19 @@ export default function FormAnalysis() {
   const [badProcessEnding, setBadProcessEnding] = useState(false);
   const [currentDate, setCurrentDate] = useState("");
   const [currentTime, setCurrentTime] = useState("");
+  const [endDate, setEndDate] = useState("");
+  const [endTime, setEndTime] = useState("");
   const [resultMessage, setResultMessage] = useState("");
   const [originalityCount, setOriginalityCount] = useState(0);
   const [chatGPTCount, setChatGPTCount] = useState(0);
   const [fastDetectGPTCount, setFastDetectGPTCount] = useState(0);
   const [lmWatermarkingCount, setLmWatermarkingCount] = useState(0);
   const [pocCount, setPocCount] = useState(0);
+  const [originalityDisplayCount, setOriginalityDisplayCount] = useState("");
+  const [chatGPTDisplayCount, setChatGPTDisplayCount] = useState("");
+  const [fastDetectGPTDisplayCount, setFastDetectGPTDisplayCount] = useState("");
+  const [lmWatermarkingDisplayCount, setLmWatermarkingDisplayCount] = useState("");
+  const [pocDisplayCount, setPocDisplayCount] = useState("");
   const [item, setItem] = useState(null); //Análisis creado
   const [usedAIs, setUsedAIs] = useState([]);
   /*** 
@@ -126,6 +133,36 @@ export default function FormAnalysis() {
     setFormPass(pass);
   }, [title, files, keys, freeAIs]);
 
+  useEffect(() => {
+    const originalityDisplayCount = files.length > 0 ? originalityCount*100/files.length : 0;
+    const stringOriginalityDisplayCount = originalityDisplayCount.toString() + "%";
+    setOriginalityDisplayCount(stringOriginalityDisplayCount);
+  }, [originalityCount])
+
+  useEffect(() => {
+    const chatGPTDisplayCount = files.length > 0 ? chatGPTCount*100/files.length : 0;
+    const stringChatGPTDisplayCount = chatGPTDisplayCount.toString() + "%";
+    setChatGPTDisplayCount(stringChatGPTDisplayCount);
+  }, [chatGPTCount])
+
+  useEffect(() => {
+    const fastDetectGPTDisplayCount = files.length > 0 ? fastDetectGPTCount*100/files.length : 0;
+    const stringFastDetectGPTDisplayCount = fastDetectGPTDisplayCount.toString() + "%";
+    setFastDetectGPTDisplayCount(stringFastDetectGPTDisplayCount);
+  }, [fastDetectGPTCount])
+
+  useEffect(() => {
+    const lmWatermarkingDisplayCount = files.length > 0 ? lmWatermarkingCount*100/files.length : 0;
+    const stringLmWatermarkingDisplayCount = lmWatermarkingDisplayCount.toString() + "%";
+    setLmWatermarkingDisplayCount(stringLmWatermarkingDisplayCount);
+  }, [lmWatermarkingCount])
+
+  useEffect(() => {
+    const pocDisplayCount = files.length > 0 ? pocCount*100/files.length : 0;
+    const stringPocDisplayCount = pocDisplayCount.toString() + "%";
+    setPocDisplayCount(stringPocDisplayCount);
+  }, [pocCount])
+
   //FUNCION PRINCIPAL: PROCESO DE ANÁLISIS
   async function handleSubmit(event) {
     event.preventDefault();
@@ -153,16 +190,17 @@ export default function FormAnalysis() {
 
       //Inicio proceso
       //Rescatar identificadores
-      const api_originality = keys.find(key => key.ai.name === "Originality").api_key;
-      const api_chatGPT = keys.find(key => key.ai.name === "ChatGPT (GPT-4)").api_key;
+      //const api_originality = keys.find(key => key.ai.name === "Originality").api_key;
+      //const api_chatGPT = keys.find(key => key.ai.name === "ChatGPT (GPT-4)").api_key;
 
-      const originality_id = keys.find(key => key.ai.name === "Originality").ai.id;
-      const chatgpt_id = keys.find(key => key.ai.name === "ChatGPT (GPT-4)").ai.id;
-      const fastDetectGPT_id = freeAIs.find(ai => ai.name === "fastDetectGPT").id;
-      const lmWatermarking_id = freeAIs.find(ai => ai.name === "lmWatermarking D.").id;
-      const poc_id = freeAIs.find(ai => ai.name === "PoC AI Detector").id;
+      console.log(files.length);
 
-      
+      const originality_id = keys.find(key => key.ai.name === "Originality")?.ai?.id;
+      const chatgpt_id = keys.find(key => key.ai.name === "ChatGPT (GPT-4)")?.ai?.id;
+      const fastDetectGPT_id = freeAIs.find(ai => ai.name === "Fast Detect GPT")?.id;
+      const lmWatermarking_id = freeAIs.find(ai => ai.name === "Lm Watermarking")?.id;
+      const poc_id = freeAIs.find(ai => ai.name === "PoC AI Detector")?.id;
+
       /*
       let verifyOriginality = null;
       try {
@@ -216,6 +254,7 @@ export default function FormAnalysis() {
       }
 
       const dataTexts = await textsExtracted.json();
+      console.log(dataTexts);
       const texts = dataTexts.texts;
       //const texts_200 = dataTexts.texts_200; //A considerar apenas estén listos los detectores
 
@@ -227,7 +266,13 @@ export default function FormAnalysis() {
       try {
         new_analysis = await fetch("http://localhost:3333/beta/final/analysis", {
           method: "POST",
-          body: formData
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({
+            title: title,
+            tags: tags
+          })
         });
       } catch (error) {
         //Creación fallida, no se puede continuar
@@ -237,7 +282,7 @@ export default function FormAnalysis() {
         setResultMessage("Proceso finalizado con errores: " + error);
         return;
       }
-      const analysis = new_analysis.json();
+      const analysis = await new_analysis.json();
       console.log(analysis);
       setItem(analysis);
       const analysis_id = analysis.id;
@@ -253,6 +298,9 @@ export default function FormAnalysis() {
         try {
           new_document = await fetch("http://localhost:3333/beta/final/document", {
             method: "POST",
+            headers: {
+              "Content-Type": "application/json"
+            },
             body: JSON.stringify({
               title: texts[i].title,
               analysis_id: analysis_id
@@ -266,10 +314,13 @@ export default function FormAnalysis() {
           return;
         }
 
-        const document_id = new_document.json().id;
+        const document = await new_document.json();
+        console.log(document);
+        const document_id = document.id;
 
         //Resultados
         if (usedAIs.includes("Originality")) {
+          console.log(usedAIs.includes("Originality"));
           const ai_score_originality = Math.random() * (100 - 0) + 0;
           const result_originality = ai_score_originality < 50 ? "Human" : "AI";
           //Se crea el resultado
@@ -277,6 +328,9 @@ export default function FormAnalysis() {
           try {
             new_result = await fetch("http://localhost:3333/beta/final/result", {
               method: "POST",
+              headers: {
+                "Content-Type": "application/json"
+              },
               body: JSON.stringify({
                 ai_score: ai_score_originality,
                 ai_result: result_originality,
@@ -291,13 +345,14 @@ export default function FormAnalysis() {
             setResultMessage("Proceso finalizado con errores: " + error);
             return;
           }
-          if (new_result.status === 200) {
+          if (new_result.status === 201) {
             const originalityCurrentCount = originalityCount + 1;
             setOriginalityCount(originalityCurrentCount);
           }
         }
 
-        if (usedAIs.includes("ChatGPT")) {
+        if (usedAIs.includes("ChatGPT (GPT-4)")) {
+          console.log(usedAIs.includes("ChatGPT (GPT-4)"));
           const ai_score_chatGPT = Math.random() * (100 - 0) + 0;
           const result_chatGPT = ai_score_chatGPT < 50 ? "Human" : "AI";
           //Se crea el resultado
@@ -305,6 +360,9 @@ export default function FormAnalysis() {
           try {
             new_result = await fetch("http://localhost:3333/beta/final/result", {
               method: "POST",
+              headers: {
+                "Content-Type": "application/json"
+              },
               body: JSON.stringify({
                 ai_score: ai_score_chatGPT,
                 ai_result: result_chatGPT,
@@ -319,13 +377,14 @@ export default function FormAnalysis() {
             setResultMessage("Proceso finalizado con errores: " + error);
             return;
           }
-          if (new_result.status === 200) {
+          if (new_result.status === 201) {
             const chatGPTCurrentCount = chatGPTCount + 1;
             setChatGPTCount(chatGPTCurrentCount);
           }
         }
 
         if (usedAIs.includes("Fast Detect GPT")) {
+          console.log(usedAIs.includes("Fast Detect GPT"));
           //Temporal
           const ai_score_fastDetectGPT = Math.random() * (100 - 0) + 0;
           const result_fastDetectGPT = ai_score_fastDetectGPT < 50 ? "Human" : "AI";
@@ -334,6 +393,9 @@ export default function FormAnalysis() {
           try {
             new_result = await fetch("http://localhost:3333/beta/final/result", {
               method: "POST",
+              headers: {
+                "Content-Type": "application/json"
+              },
               body: JSON.stringify({
                 ai_score: ai_score_fastDetectGPT,
                 ai_result: result_fastDetectGPT,
@@ -348,13 +410,14 @@ export default function FormAnalysis() {
             setResultMessage("Proceso finalizado con errores: " + error);
             return;
           }
-          if (new_result.status === 200) {
+          if (new_result.status === 201) {
             const fastDetectGPTCurrentCount = fastDetectGPTCount + 1;
             setFastDetectGPTCount(fastDetectGPTCurrentCount);
           }
         }
 
         if (usedAIs.includes("Lm Watermarking")) {
+          console.log(usedAIs.includes("Lm Watermarking"));
           const ai_score_lmWatermarking = Math.random() * (100 - 0) + 0;
           const result_lmWatermarking = ai_score_lmWatermarking < 50 ? "Human" : "AI";
           //Se crea el resultado
@@ -362,6 +425,9 @@ export default function FormAnalysis() {
           try {
             new_result = await fetch("http://localhost:3333/beta/final/result", {
               method: "POST",
+              headers: {
+                "Content-Type": "application/json"
+              },
               body: JSON.stringify({
                 ai_score: ai_score_lmWatermarking,
                 ai_result: result_lmWatermarking,
@@ -376,13 +442,14 @@ export default function FormAnalysis() {
             setResultMessage("Proceso finalizado con errores: " + error);
             return;
           }
-          if (new_result.status === 200) {
+          if (new_result.status === 201) {
             const lmWatermarkingCurrentCount = lmWatermarkingCount + 1;
             setLmWatermarkingCount(lmWatermarkingCurrentCount);
           }
         }
 
         if (usedAIs.includes("PoC AI Detector")) {
+          console.log(usedAIs.includes("PoC AI Detector"));
           const ai_score_poc = Math.random() * (100 - 0) + 0;
           const result_poc = ai_score_poc < 50 ? "Human" : "AI";
           //Se crea el resultado
@@ -390,6 +457,9 @@ export default function FormAnalysis() {
           try {
             new_result = await fetch("http://localhost:3333/beta/final/result", {
               method: "POST",
+              headers: {
+                "Content-Type": "application/json"
+              },
               body: JSON.stringify({
                 ai_score: ai_score_poc,
                 ai_result: result_poc, 
@@ -397,6 +467,8 @@ export default function FormAnalysis() {
                 ai_id: poc_id,
               })
             });
+            const dataResult = await new_result.json();
+            console.log(dataResult);
           } catch (error) {
             console.log("Error:", error);
             setProcessFinished(true);
@@ -404,16 +476,36 @@ export default function FormAnalysis() {
             setResultMessage("Proceso finalizado con errores: " + error);
             return;
           }
-          if (new_result.status === 200) {
+          console.log(new_result);
+          console.log(new_result.status);
+          if (new_result.status === 201) { //Tiene que ser en base al detector, no al método interno
             const pocCurrentCount = pocCount + 1;
             setPocCount(pocCurrentCount);
+            console.log("POC count: "+pocCurrentCount);
           }
         }
         
         var timeTextAnalysisEnd = performance.now();
         console.log("Tiempo de análisis de texto "+ texts[i].title+": " + (timeTextAnalysisEnd - timeTextAnalysis) + " ms");
-
-        //Algoritmo principal
+      }
+      var fullTimeAnalysisEnd = performance.now();
+      console.log("Tiempo total de análisis: " + (fullTimeAnalysisEnd - fullTimeAnalysis) + " ms");
+      setProcessFinished(true);
+      setBadProcessEnding(false);
+      setResultMessage("Proceso finalizado exitósamente")
+      const endDate = new Date();
+      setEndDate(endDate.toLocaleDateString());
+      setEndTime(endDate.toLocaleTimeString());
+    } catch (error) { //No debería llegar aquí, es sólo para evitar una posible caida del sistema
+      console.log("Error inesperado:");
+      console.log(error);
+      setProcessFinished(true);
+      setBadProcessEnding(true);
+      setResultMessage("Proceso finalizado con errores: " + error);
+      return;
+    }
+  }
+  //Algoritmo principal
         /* 
         //ORIGINALITY
         if (usedAIs.includes("Originality")) {
@@ -526,21 +618,6 @@ export default function FormAnalysis() {
           setBadProcessEnding(true);
           setResultMessage("Proceso finalizado con errores: " + error);
         } */
-      }
-      var fullTimeAnalysisEnd = performance.now();
-      console.log("Tiempo total de análisis: " + (fullTimeAnalysisEnd - fullTimeAnalysis) + " ms");
-      setProcessFinished(true);
-      setBadProcessEnding(false);
-      setResultMessage("Proceso finalizado exitósamente")
-    } catch (error) { //No debería llegar aquí, es sólo para evitar una posible caida del sistema
-      console.log("Error inesperado:");
-      console.log(error);
-      setProcessFinished(true);
-      setBadProcessEnding(true);
-      setResultMessage("Proceso finalizado con errores: " + error);
-      return;
-    }
-  }
   return (
     !processStarted ? (
       <div className="flex justify-center items-center h-screen">
@@ -668,10 +745,12 @@ export default function FormAnalysis() {
               <li>Título: <span className="font-semibold">{title}</span></li>
               <li>Fecha inicio: <span className="font-semibold">{currentDate}</span></li>
               <li>Hora inicio: <span className="font-semibold">{currentTime}</span></li>
-              <li>Número archivos: <span className="font-semibold">{files.length}</span></li>
+              <li>Cantidad archivos: <span className="font-semibold">{files.length}</span></li>
               <li>IAs usadas: <span className="font-semibold">{formatAIs()}</span></li>
               <li>Categorías: <span className="font-semibold">{formatTags()}</span></li>
               <li>Estado: <span className="font-semibold">{!processFinished ? ("En proceso") : ("Finalizado")}</span></li>
+              <li>Fecha término: <span className="font-semibold">{endDate}</span></li>
+              <li>Hora término: <span className="font-semibold">{endTime}</span></li>
               <li>Resultado: <span className="font-semibold">{resultMessage}</span></li>
             </ul>
           </div>
@@ -680,50 +759,50 @@ export default function FormAnalysis() {
 
             <div className="flex justify-between mb-1 py-2">
               <span className="text-base font-medium text-purple-700 dark:text-white">Originality</span>
-              <span className="text-sm font-medium text-purple-700 dark:text-white">{files.length > 0 ? originalityCount * 100 / files.length + "%" : 0}</span>
+              <span className="text-sm font-medium text-purple-700 dark:text-white">{files.length > 0 ? originalityDisplayCount : "0%"}</span>
             </div>
             <div className="w-full bg-gray-200 rounded-full h-2.5 dark:bg-gray-700">
-              <div className="bg-purple-600 h-2.5 rounded-full" style={{ width: files.length > 0 ? originalityCount * 100 / files.length + "%" : 0 }}></div>
+              <div className="bg-purple-600 h-2.5 rounded-full" style={{ width: files.length > 0 ? originalityDisplayCount : "0%" }}></div>
             </div>
 
             <div className="flex justify-between mb-1 py-2">
               <span className="text-base font-medium text-green-700 dark:text-white">ChatGPT (GPT-4)</span>
-              <span className="text-sm font-medium text-green-700 dark:text-white">{files.length > 0 ? chatGPTCount * 100 / files.length + "%" : 0}</span>
+              <span className="text-sm font-medium text-green-700 dark:text-white">{files.length > 0 ? chatGPTDisplayCount : "0%"}</span>
             </div>
             <div className="w-full bg-gray-200 rounded-full h-2.5 dark:bg-gray-700">
-              <div className="bg-green-600 h-2.5 rounded-full" style={{ width: files.length > 0 ? chatGPTCount * 100 / files.length + "%" : 0 }}></div>
+              <div className="bg-green-600 h-2.5 rounded-full" style={{ width: files.length > 0 ? chatGPTDisplayCount : "0%" }}></div>
             </div>
 
             <div className="flex justify-between mb-1 py-2">
-              <span className="text-base font-medium text-red-700 dark:text-white">Fast Detect GPT (Soon)</span>
-              <span className="text-sm font-medium text-red-700 dark:text-white">{files.length > 0 ? fastDetectGPTCount * 100 / files.length + "%" : 0}</span>
+              <span className="text-base font-medium text-red-700 dark:text-white">Fast Detect GPT</span>
+              <span className="text-sm font-medium text-red-700 dark:text-white">{files.length > 0 ? fastDetectGPTDisplayCount : "0%"}</span>
             </div>
             <div className="w-full bg-gray-200 rounded-full h-2.5 dark:bg-gray-700">
-              <div className="bg-red-600 h-2.5 rounded-full" style={{ width: files.length > 0 ? fastDetectGPTCount * 100 / files.length + "%" : 0 }}></div>
+              <div className="bg-red-600 h-2.5 rounded-full" style={{ width: files.length > 0 ? fastDetectGPTDisplayCount : "0%" }}></div>
             </div>
 
             <div className="flex justify-between mb-1 py-2">
-              <span className="text-base font-medium text-sky-700 dark:text-white">Lm Watermarking (Soon)</span>
-              <span className="text-sm font-medium text-sky-700 dark:text-white">{files.length > 0 ? lmWatermarkingCount * 100 / files.length + "%" : 0}</span>
+              <span className="text-base font-medium text-sky-700 dark:text-white">Lm Watermarking</span>
+              <span className="text-sm font-medium text-sky-700 dark:text-white">{files.length > 0 ? lmWatermarkingDisplayCount : "0%"}</span>
             </div>
             <div className="w-full bg-gray-200 rounded-full h-2.5 dark:bg-gray-700">
-              <div className="bg-sky-600 h-2.5 rounded-full" style={{ width: files.length > 0 ? lmWatermarkingCount * 100 / files.length + "%" : 0 }}></div>
+              <div className="bg-sky-600 h-2.5 rounded-full" style={{ width: files.length > 0 ? lmWatermarkingDisplayCount : "0%" }}></div>
             </div>
 
             <div className="flex justify-between mb-1 py-2">
-              <span className="text-base font-medium text-black dark:text-white">PoC AI Detector (Soon)</span>
-              <span className="text-sm font-medium text-black dark:text-white">{files.length > 0 ? pocCount * 100 / files.length + "%" : 0}</span>
+              <span className="text-base font-medium text-black dark:text-white">PoC AI Detector</span>
+              <span className="text-sm font-medium text-black dark:text-white">{files.length > 0 ? pocDisplayCount : "0%"}</span>
             </div>
             <div className="w-full bg-gray-200 rounded-full h-2.5 dark:bg-gray-700">
-              <div className="bg-black h-2.5 rounded-full" style={{ width: files.length > 0 ? pocCount * 100 / files.length + "%" : 0 }}></div>
+              <div className="bg-black h-2.5 rounded-full" style={{ width: files.length > 0 ? pocDisplayCount : "0%" }}></div>
             </div>
           </div>
         {processFinished && (
           <div className="grid grid-cols-1 sm:grid-cols-2 justify-between px-4 gap-4">
-            <Link to={`/analysis/${item.id}`} state={{ item }} visible={processFinished && !badProcessEnding} className="text-center mt-4 p-2 text-blue-500 bg-white border border-blue-500 rounded-xl transition ease-in-out duration-500 hover:bg-blue-500 hover:text-white">
+            <Link to={`/analysis/${item.id}`} state={{ item }} className="text-center mt-4 p-2 text-blue-500 bg-white border border-blue-500 rounded-xl transition ease-in-out duration-500 hover:bg-blue-500 hover:text-white">
               <button>Ver análisis</button>
             </Link>
-            <Link to={`/logged in`} className="text-center mt-4 p-2 text-blue-500 bg-white border border-blue-500 rounded-xl transition ease-in-out duration-500 hover:bg-blue-500 hover:text-white">
+            <Link to={`/loggedin`} className="text-center mt-4 p-2 text-blue-500 bg-white border border-blue-500 rounded-xl transition ease-in-out duration-500 hover:bg-blue-500 hover:text-white">
               <button>Volver</button>
             </Link>
           </div>

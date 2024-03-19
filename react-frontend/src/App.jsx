@@ -11,6 +11,7 @@ import EditKey from './views/EditKey.jsx'
 import NotFound from './views/NotFound.jsx'
 import Navbar from './components/Navbar.jsx';
 import Tags from './views/Tags.jsx'
+import AddTag from './views/AddTag.jsx'
 import FAQ from './views/FAQ.jsx'
 
 function App() {
@@ -30,6 +31,7 @@ function App() {
           <Route path='/keys/edit/:id' element={<EditKey/>}/>
           <Route path="/faq" element={<FAQ />} />
           <Route path="/tags" element={<Tags />}/>
+          <Route path="/tags/add" element={<AddTag />}/>
           <Route path='*' element={<NotFound />} />
         </Routes>
       </Router>

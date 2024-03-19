@@ -102,6 +102,15 @@ export class BetaService {
     return await this.prisma.tag.findMany();
   }
 
+  async createTag(body: any) {
+    console.log(body);
+    return await this.prisma.tag.create({
+      data: {
+        name: body.name
+      }
+    });
+  }
+
   async deleteAnalysis(id: number) {
     return await this.prisma.analysis.delete({
       where: {
@@ -228,19 +237,7 @@ export class BetaService {
       console.log('Error: ', err);
     });
   }
-  /* 
-  async parseTesisDoc(res: Response) {
-    try {
-      const loader = new PDFLoader("./tesis.pdf", {
-        splitPages: false,
-      });
-      const docs = await loader.load();
-      return res.status(HttpStatus.OK).json(docs);
-    } catch (error) {
-      throw new HttpException('Error: ' + error, HttpStatus.BAD_REQUEST);
-    }
-  }*/
-  // Sub funciones para proceso analisis
+
   // Extraer textos de documentos
   async extractTexts(docs: any) {
     console.log(docs);
@@ -248,7 +245,6 @@ export class BetaService {
     let texts_200 = [];
     
     try {
-      const start_ext_text = performance.now();
       for (let i = 0; i < docs.length; i++) {
         let title = docs[i].originalname;
         let text = "";
@@ -270,9 +266,9 @@ export class BetaService {
           console.log("Archivo " + i + ": DOCX"); 
           try {
             const result = await mammoth.extractRawText({ buffer: docs[i].buffer });
-            //console.log(result);
+            console.log(result);
             text = result.value;
-            //console.log(text);
+            console.log(text);
             const doc = {title: title, text: text};
             texts.push(doc);
           } catch (error) {
@@ -280,12 +276,9 @@ export class BetaService {
           }
         }
       }
-      const end_ext_text = performance.now();
-      console.log("Tiempo de extracción de texto: "+(end_ext_text-start_ext_text)+" ms.");
-      
-      //Verificar primero si modelo fue seleccionado	
+
       //Preprocesamiento adicional para modelo PoC (Dividir cada texto en pedazos de 200 palabras)
-      const start_divide_text = performance.now();
+      
       for (let i = 0; i < texts.length; i++) {
         const title = texts[i].title;
         let text_200 = [];
@@ -304,18 +297,54 @@ export class BetaService {
         const doc = {title: title, text: text_200};
         texts_200.push(doc);
       }
-      const end_divide_text = performance.now();
-      console.log("Tiempo de dividir texto: "+(end_divide_text-start_divide_text)+" ms.");
       const response = {
         texts: texts,
         texts_200: texts_200,
-        time: (end_divide_text-start_ext_text),
       }
       return response;
     } catch (error) {
       console.log(error);
       throw new HttpException('Error: ' + error, HttpStatus.BAD_REQUEST);
     }
+  }
+
+
+  async createAnalysis(body: any) {
+    console.log(body);
+    let ids = [];
+    for (let i = 0; i < body.tags.length; i++) {
+      ids.push(body.tags[i].id);
+    }
+    return await this.prisma.analysis.create({
+      data: {
+        title: body.title,
+        tags: {
+          connect: ids.map((id) => ({id: id})),
+        }
+      }
+    });
+  }
+
+  async createDocument(body: any) {
+    console.log(body);
+    return await this.prisma.document.create({
+      data: {
+        title: body.title,
+        analysis_id: body.analysis_id
+      }
+    });
+  }
+
+  async createResult(body: any) {
+    console.log(body);
+    return await this.prisma.result.create({
+      data: {
+        ai_score: body.ai_score,
+        ai_result: body.ai_result,
+        ai_id: body.ai_id,
+        document_id: body.document_id
+      }
+    });
   }
 
   async verifyOriginality(api_key: string) {
@@ -401,34 +430,6 @@ export class BetaService {
       body: JSON.stringify({
         "text": body.text,
       })
-    });
-  }
-
-  async createResult(body: any) {
-    console.log(body);
-    return await this.prisma.result.create({
-      data: {
-        ai_score: body.ai_score,
-        ai_result: body.ai_result,
-        ai_id: body.ai_id,
-        document_id: body.document_id
-      }
-    });
-  }
-
-  async createAnalysis(body: any) {
-    console.log(body);
-    let ids = [];
-    for (let i = 0; i < body.tags.length; i++) {
-      ids.push(body.tags[i].id);
-    }
-    return await this.prisma.analysis.create({
-      data: {
-        title: body.title,
-        tags: {
-          connect: ids.map((id) => ({id: id})),
-        }
-      }
     });
   }
 }

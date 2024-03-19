@@ -37,7 +37,7 @@ function Tags() {
   }
 
   return (
-    <div>
+    <>
       <div className="w-full sm:px-6">
         <div className="bg-white px-4 py-4 md:px-8 md:py-7 xl:px-10">
           <div className="flex items-center">
@@ -65,8 +65,8 @@ function Tags() {
                   <th scope="col" className="px-6 py-3">
                     Tags
                   </th>
-                  <th scope="col" className="px-6 py-3">
-                    <span className="sr-only">Opciones</span>
+                  <th scope="col" className="px-6 py-3 text-right">
+                    Opciones
                   </th>
                 </tr>
               </thead>
@@ -85,27 +85,27 @@ function Tags() {
                     </td>
                   </tr>
                 ))}
-                {selectedId && (
-                  <Modal open={open} onClose={() => setOpen(false)} className="flex items-center justify-center min-h-screen">
-                    <div className="text-center w-56">
-                      <FontAwesomeIcon icon={faTrashCan} size="xl" className="mx-auto text-red-500" />
-                      <div className="mx-auto my-4 w-48">
-                        <h3 className="text-lg font-black text-gray-800">¿Estás segur@?</h3>
-                        <p className="text-sm text-gray-500">Esta acción es irreversible</p>
-                      </div>
-                      <div className="flex gap-4">
-                        <button onClick={() => {handleDelete(selectedId);setOpen(false)}} className="w-full bg-red-500 shadow-red-400/40 text-white flex gap-2 items-center justify-center py-2 px-4 font-semibold shadow-md rounded-xl">Eliminar</button>
-                        <button className="w-full border bg-white flex gap-2 items-center justify-center py-2 px-4 font-semibold shadow-md rounded-xl" onClick={() => setOpen(false)}>Volver</button>
-                      </div>
-                    </div>
-                  </Modal>
-                )}
               </tbody>
             </table>
           </div>
         </div>
       </div>
-    </div>
+      {selectedId && (
+        <Modal open={open} onClose={() => setOpen(false)} className="flex items-center justify-center min-h-screen">
+          <div className="text-center w-56">
+            <FontAwesomeIcon icon={faTrashCan} size="xl" className="mx-auto text-red-500" />
+            <div className="mx-auto my-4 w-48">
+              <h3 className="text-lg font-black text-gray-800">¿Estás segur@?</h3>
+              <p className="text-sm text-gray-500">Esta acción es irreversible</p>
+            </div>
+            <div className="flex gap-4">
+              <button onClick={() => { handleDelete(selectedId); setOpen(false) }} className="w-full bg-red-500 shadow-red-400/40 text-white flex gap-2 items-center justify-center py-2 px-4 font-semibold shadow-md rounded-xl">Eliminar</button>
+              <button className="w-full border bg-white flex gap-2 items-center justify-center py-2 px-4 font-semibold shadow-md rounded-xl" onClick={() => setOpen(false)}>Volver</button>
+            </div>
+          </div>
+        </Modal>
+      )}
+    </>
   );
 }
 

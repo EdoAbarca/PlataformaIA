@@ -68,8 +68,8 @@ function Keys() {
                   <th scope="col" className="px-6 py-3">
                     IA
                   </th>
-                  <th scope="col" className="px-6 py-3">
-                    <span className="sr-only">Opciones</span>
+                  <th scope="col" className="px-6 py-3 text-right">
+                    Opciones
                   </th>
                 </tr>
               </thead>

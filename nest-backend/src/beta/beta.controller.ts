@@ -79,6 +79,12 @@ export class BetaController {
   getTags() {
     return this.betaService.getTags();
   }
+
+  @Post('tag')
+  createTag(@Body() body: any) {
+    return this.betaService.createTag(body);
+  }
+
   /**
   @Get('ai/paid')
   getPaidAIs() {
@@ -90,6 +96,22 @@ export class BetaController {
   deleteAnalysis(@Param('id', ParseIntPipe) id: number) {
     return this.betaService.deleteAnalysis(id);
   }
+
+  @Post('analysis')
+  async createAnalysis(@Body() body: any) {
+    return this.betaService.createAnalysis(body);
+  }
+
+  @Post('document')
+  createDocument(@Body() body: any) {
+    return this.betaService.createDocument(body);
+  }
+
+  @Post('result')
+  async createResult(@Body() body: any) {
+    return this.betaService.createResult(body);
+  }
+  
 
   //Funciones asociadas a proceso análisis
   //Verificar estado api key Originality
@@ -149,16 +171,6 @@ export class BetaController {
   @Post('detect/poc-ai-detector')
   async detectPoCAIDetector(@Body() body: any) {
     //return this.betaService.detectAIServicePoCAIDetector(body);
-  }
-
-  @Post('result')
-  async createResult(@Body() body: any) {
-    return this.betaService.createResult(body);
-  }
-
-  @Post('analysis')
-  async createAnalysis(@Body() body: any) {
-    return this.betaService.createAnalysis(body);
   }
 }
 

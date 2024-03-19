@@ -1,0 +1,11 @@
+gradio
+nltk
+scipy
+torch
+transformers
+tokenizers
+django
+djangorestframework
+python-dotenv
+accelerate
+django-cors-headers

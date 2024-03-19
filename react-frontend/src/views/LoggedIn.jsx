@@ -5,10 +5,6 @@ import Modal from "../components/Modal.jsx";
 import { faTrashCan } from "@fortawesome/free-solid-svg-icons";
 import HoverText from "../components/HoverText.jsx";
 
-function returnGuest() {
-  return "Usuario de prueba";
-}
-
 function returnTestName(){
   return "Eduardo Abarca Chávez"
 }
@@ -19,29 +15,95 @@ function LoggedIn() {
   const [selectedId, setSelectedId] = useState(null);
 
   useEffect(() => {
-    async function fetchAnalyses() {
-      try {
-        const response = await fetch("http://localhost:3333/beta/final/analysis");
-        const data = await response.json();
-        setAnalysis(data);
-        console.log(data);
-      } catch (error) {
-        console.log(error);
-      }
-    }
-
-    fetchAnalyses();
+    fetch("http://localhost:3333/beta/final/analysis")
+      .then((response) => response.json())
+      .then((data) => setAnalysis(data))
+      .catch((error) => console.log(error));
   }, []);
+
+  useEffect(() => {
+    fetch("http://localhost:3333/beta/final/analysis")
+      .then((response) => response.json())
+      .then((data) => setAnalysis(data))
+      .catch((error) => console.log(error));
+  }, [analysis]);
 
   async function handleAnalysisDelete(id) {
     try {
       const response = await fetch(`http://localhost:3333/beta/final/analysis/${id}`, {
-        method: "DELETE"
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json"
+        },
       });
-      const data = await response.json();
-      console.log(data);
+      //const data = await response.json();
+      //console.log(data);
       setAnalysis(analysis.filter(item => item.id !== id));
     } catch (error) {
+      console.log(error);
+    }
+  }
+
+  async function testDebertav3(){
+    try {
+      const response = await fetch("http://localhost:8003/api/debertav3/detect",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          "title": "Prueba deberta v3",
+          "text": ["El presidente de la República, Sebastián Piñera, anunció este jueves un nuevo plan de ayuda para la clase media, que incluye un bono de $500 mil para quienes hayan visto disminuidos sus ingresos y un préstamo solidario para la clase media, que se podrá pagar en cuatro años y con un año de gracia. El mandatario explicó que el bono de $500 mil se entregará a quienes hayan visto disminuidos sus ingresos en al menos un 20% y que pertenezcan al 80% más vulnerable de la población, según el Registro Social de Hogares. Además, el bono será entregado a quienes tengan ingresos formales entre $400 mil y $2 millones. El beneficio se entregará por una sola vez y se podrá solicitar a partir del 8 de abril en el sitio web del Servicio de Impuestos Internos (SII)."]
+        })
+      });
+      console.log(response)
+      const data = await response.json();
+      console.log(data);
+    }
+    catch (error) {
+      console.log(error);
+    }
+  }
+
+  async function testFastDetectGPT(){
+    try {
+      const response = await fetch("http://localhost:8001/api/fast-detect-gpt/detect",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          "text": "El presidente de la República, Sebastián Piñera, anunció este jueves un nuevo plan de ayuda para la clase media, que incluye un bono de $500 mil para quienes hayan visto disminuidos sus ingresos y un préstamo solidario para la clase media, que se podrá pagar en cuatro años y con un año de gracia. El mandatario explicó que el bono de $500 mil se entregará a quienes hayan visto disminuidos sus ingresos en al menos un 20% y que pertenezcan al 80% más vulnerable de la población, según el Registro Social de Hogares. Además, el bono será entregado a quienes tengan ingresos formales entre $400 mil y $2 millones. El beneficio se entregará por una sola vez y se podrá solicitar a partir del 8 de abril en el sitio web del Servicio de Impuestos Internos (SII)."
+        })
+      });
+      console.log(response)
+      const data = await response.json();
+      console.log(data);
+    }
+    catch (error) {
+      console.log(error);
+    }
+  }
+
+  async function testLmWatermarking(){
+    try {
+      const response = await fetch("http://localhost:8002/api/lm-watermarking/detect",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          "text": "El presidente de la República, Sebastián Piñera, anunció este jueves un nuevo plan de ayuda para la clase media, que incluye un bono de $500 mil para quienes hayan visto disminuidos sus ingresos y un préstamo solidario para la clase media, que se podrá pagar en cuatro años y con un año de gracia. El mandatario explicó que el bono de $500 mil se entregará a quienes hayan visto disminuidos sus ingresos en al menos un 20% y que pertenezcan al 80% más vulnerable de la población, según el Registro Social de Hogares. Además, el bono será entregado a quienes tengan ingresos formales entre $400 mil y $2 millones. El beneficio se entregará por una sola vez y se podrá solicitar a partir del 8 de abril en el sitio web del Servicio de Impuestos Internos (SII)."
+        })
+      });
+      console.log(response)
+      const data = await response.json();
+      console.log(data);
+    }
+    catch (error) {
       console.log(error);
     }
   }
@@ -72,6 +134,9 @@ function LoggedIn() {
             <Link to="/tags">
               <button className="p-2 rounded-xl mx-3 border border-blue-500 text-blue-500 bg-white transform ease-in-out duration-500 hover:bg-blue-500 hover:text-white">Gestionar categorías</button>
             </Link>
+            <button onClick={testDebertav3} className="p-2 rounded-xl mx-3 border border-green-500 text-green-500 bg-white transform ease-in-out duration-500 hover:bg-green-500 hover:text-white">Test deberta v3</button>
+            <button onClick={testFastDetectGPT} className="p-2 rounded-xl mx-3 border border-green-500 text-green-500 bg-white transform ease-in-out duration-500 hover:bg-green-500 hover:text-white">Test fast detect gpt</button>
+            <button onClick={testLmWatermarking} className="p-2 rounded-xl mx-3 border border-green-500 text-green-500 bg-white transform ease-in-out duration-500 hover:bg-green-500 hover:text-white">Test lm watermarking</button>
           </div>
         </div>
         {analysis && analysis.length > 0 ? (

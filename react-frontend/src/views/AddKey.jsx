@@ -1,26 +1,30 @@
 import { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 function AddKey() {
 
   const [key, setKey] = useState("");
-  const [email, setEmail] = useState("");
   const [options, setOptions] = useState([]);
+  const [formPass, setFormPass] = useState(false);
   const [selectedOption, setSelectedOption] = useState("");
+  const navigate = useNavigate();
 
   useEffect(() => {
-    // Fetch data from API to get all IAs registered
-    async function fetchData() {
-      try {
-        const response = await fetch("http://localhost:3333/beta/final/ai/paid");
-        const data = await response.json();
-        setOptions(data);
-      } catch (error) {
-        console.error(error);
-      }
-    };
-    fetchData();
+    fetch("http://localhost:3333/beta/final/ai/paid")
+      .then(response => response.json())
+      .then(data => setOptions(data))
+      .catch(error => console.error(error));
   }, [])
+
+  function goBack(){
+    navigate("/keys");
+  }
+
+  useEffect(() => {
+    const keyPass = key.length > 0;
+    const optionPass = selectedOption.length > 0;
+    setFormPass(keyPass && optionPass); //Agregar a futuro verificación mediante llamado a API con key
+  })
 
   async function handleSubmit(event) {
     event.preventDefault();
@@ -29,7 +33,6 @@ function AddKey() {
     if (selectedAi) {
       const body = {
         "api_key": key,
-        "api_email": email,
         "ai_id": selectedAi.id
       }
       console.log(body);
@@ -44,9 +47,13 @@ function AddKey() {
         });
         const data = await response.json();
         console.log(data);
+        goBack();
       } catch (error) {
         console.error(error);
       }
+
+    } else {
+      console.log("No AI selected");
     }
   }
 
@@ -78,8 +85,8 @@ function AddKey() {
             <button
               type="submit"
               onClick={handleSubmit}
-              disabled={!selectedOption}
-              className="font-bold py-2 px-4 rounded-xl mt-4 text-green-500 border border-green-500 bg-white transition ease-in-out duration-500 hover:bg-green-500 hover:text-white"
+              className={`w-full py-2 border rounded-xl ${formPass ? "border-green-500 bg-white text-green-500 transition duration-500 ease-in-out hover:bg-green-500 hover:text-white" : "border-gray-300 bg-gray-300 text-gray-500"}`}
+              disabled={!formPass}
             >
               Crear
             </button>
