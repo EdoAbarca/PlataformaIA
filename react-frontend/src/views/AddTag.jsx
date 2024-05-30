@@ -1,14 +1,19 @@
 import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import Navbar from "../components/Navbar";
+import Toastify from "toastify-js";
+import "toastify-js/src/toastify.css";
+import { useAuth } from "../auth/authProvider";
 
 export default function AddTag() {
   const [tag, setTag] = useState("");
   const [formPass, setFormPass] = useState(false);
   const [tags, setTags] = useState([]);
   const navigate = useNavigate();
+  const user = useAuth();
 
   useEffect(() => {
-    fetch("http://localhost:3333/beta/final/tag")
+    fetch(`http://localhost:3333/api/final/tag/user/${user.idUser}`)
       .then((response) => response.json())
       .then((data) => setTags(data))
       .catch((error) => console.log(error));
@@ -30,28 +35,52 @@ export default function AddTag() {
 
       if (formPass) {
         // Perform the desired action when the tag doesn't exist
-        console.log("Tag doesn't exist, proceed to create it");
-        const response = await fetch("http://localhost:3333/beta/final/tag", {
+        const response = await fetch("http://localhost:3333/api/final/tag", {
           method: "POST",
           headers: {
             "Content-Type": "application/json"
           },
-          body: JSON.stringify({ name: tag })
+          body: JSON.stringify({ name: tag, user_id: user.idUser})
         });
         const data = await response.json();
         console.log(data);
+        Toastify({
+          text: "Categoría creada exitósamente.",
+          duration: 3000,
+          close: true,
+          style: {
+            background: "green",
+          },
+        }).showToast();
         goBack();
       } else {
-        // Perform the desired action when the tag already exists
-        console.log("Tag already exists or is empty");
+        Toastify({
+          text: "La categoría ya existe o está vacía.",
+          duration: 3000,
+          close: true,
+          style: {
+            background: "red",
+            text: "white",
+          },
+        }).showToast();
       }
     } catch (error) {
       console.error(error);
+      Toastify({
+        text: "Error al agregar la categoría: " + error.message,
+        duration: 3000,
+        close: true,
+        style: {
+          background: "red",
+          text: "white",
+        },
+      }).showToast();
     }
   }
 
   return (
     <div>
+      <Navbar user={user}/>
       <div className="flex flex-col items-center justify-center h-screen">
         <div className="w-full max-w-md bg-white rounded-lg shadow-md p-6">
           <h2 className="text-2xl font-bold text-gray-900 mb-4">Agregar categoría</h2>

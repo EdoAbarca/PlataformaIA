@@ -7,4 +7,8 @@ export class EditAnalysisDto {
     @IsString()
     @IsOptional()
     title: string;
+
+    @IsString()
+    @IsOptional()
+    created: string;
 }

@@ -16,19 +16,12 @@ model User {
   email     String   @unique
   username  String
   password  String
-  createdAt DateTime @default(now())
-  //analyses Analysis[]
-  //tags     Tag[]
+  created   String   @unique
+  analyses  Analysis[]
+  tags      Tag[]
+  keys      Key[]
   @@map("users")
 }
-
-//model Role { 
-  //id   Int    @id @default(autoincrement())
-  //role String @unique
-
-  //users     User[]
-  //@@map("roles")
-//}
 
 model AI {
   id      Int      @id @default(autoincrement())
@@ -45,20 +38,20 @@ model Key {
   api_key   String
   ai        AI     @relation(fields: [ai_id], references: [id], onDelete: Cascade)
   ai_id     Int
-  //user     User   @relation(fields: [user_id], references: [id], onDelete: NoAction)
-  //user_id  Int
+  user      User   @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  user_id   Int
   @@map("keys")
 }
 
 model Analysis {
   id        Int        @id @default(autoincrement())
-  created   DateTime   @default(now()) @db.Date //A reemplazar
-  //created String
+  //created   DateTime   @default(now()) @db.Date //A reemplazar
+  created   String
   title     String
   documents Document[]
   tags      Tag[]
-  //user     User   @relation(fields: [user_id], references: [id], onDelete: NoAction)
-  //user_id  Int
+  user      User   @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  user_id   Int
 
   @@map("analysis")
 }
@@ -91,8 +84,8 @@ model Tag {
   id        Int      @id @default(autoincrement())
   name      String
   analyses  Analysis[]
-  //user     User   @relation(fields: [user_id], references: [id], onDelete: NoAction)
-  //user_id  Int
+  user      User   @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  user_id   Int
   @@map("tags")
 }
 

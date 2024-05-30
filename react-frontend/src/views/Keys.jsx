@@ -1,43 +1,79 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faTrash, faTrashCan } from "@fortawesome/free-solid-svg-icons";
-import  HoverText  from "../components/HoverText.jsx";
+import { faTrash, faTrashCan, faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
+import HoverText from "../components/HoverText.jsx";
 import Modal from "../components/Modal.jsx";
+import Navbar from "../components/Navbar.jsx";
+import Toastify from "toastify-js";
+import "toastify-js/src/toastify.css";
+import { useAuth } from "../auth/authProvider.jsx";
 
 function Keys() {
   const [keys, setKeys] = useState(null);
   const [open, setOpen] = useState(false);
   const [selectedId, setSelectedId] = useState(null);
+  const [hiddenIds, setHiddenIds] = useState([]);
+  const user = useAuth();
 
   useEffect(() => {
     async function fetchKeys() {
       try {
-        const response = await fetch("http://localhost:3333/beta/final/key");
+        const response = await fetch(`http://localhost:3333/api/final/key/user/${user.idUser}`);
         const data = await response.json();
         setKeys(data);
         console.log(data);
+        const ids = data.map(item => item.id);
+        console.log(ids);
+        setHiddenIds(ids);
       } catch (error) {
         console.log(error);
       }
     }
 
     fetchKeys();
-  }, []);
+  }, [user.idUser]);
 
   async function handleDelete(id) {
     try {
-      await fetch(`http://localhost:3333/beta/final/key/${id}`, {
+      await fetch(`http://localhost:3333/api/final/key/${id}`, {
         method: "DELETE",
       });
       setKeys(keys.filter((item) => item.id !== id));
+      Toastify({
+        text: "API Key eliminada.",
+        duration: 3000,
+        close: true,
+        style: {
+          background: "blue",
+          text: "white",
+        },
+      }).showToast();
     } catch (error) {
       console.log(error);
+      Toastify({
+        text: "Error al eliminar la API Key: " + error.message,
+        duration: 3000,
+        close: true,
+        style: {
+          background: "red",
+          text: "white",
+        },
+      }).showToast();
     }
+  }
+
+  function handleHide(id) {
+    setHiddenIds([...hiddenIds, id]);
+  }
+
+  function handleUnhide(id) {
+    setHiddenIds(hiddenIds.filter((item) => item !== id));
   }
 
   return (
     <div>
+      <Navbar user={user} />
       <div className="w-full sm:px-6">
         <div className="bg-white px-4 py-4 md:px-8 md:py-7 xl:px-10">
           <div className="flex items-center">
@@ -57,35 +93,29 @@ function Keys() {
             </div>
           </div>
 
-
           <div className="static overflow-x-auto shadow-md sm:rounded-lg mt-10">
             <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
               <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                 <tr>
-                  <th scope="col" className="px-6 py-3">
-                    Código
-                  </th>
-                  <th scope="col" className="px-6 py-3">
-                    IA
-                  </th>
-                  <th scope="col" className="px-6 py-3 text-right">
-                    Opciones
-                  </th>
+                  <th scope="col" className="px-6 py-3">Código</th>
+                  <th scope="col" className="px-6 py-3">IA</th>
+                  <th scope="col" className="px-6 py-3 text-right">Opciones</th>
                 </tr>
               </thead>
               <tbody>
                 {keys && keys.map((item) => (
                   <tr key={item.id} className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
                     <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                      {item.api_key}
+                      {hiddenIds.includes(item.id) ? "**********" : item.api_key}
                     </th>
-                    <td className="px-6 py-4">
-                      {item.ai.name}
-                    </td>
+                    <td className="px-6 py-4">{item.ai.name}</td>
                     <td className="px-6 py-4 text-right">
                       <div className="relative">
-                        <button onClick={() => { setOpen(true); setSelectedId(item.id) }} className="text-white font-bold bg-red-600 hover:bg-red-700 rounded-full px-3 py-2">
+                        <button onClick={() => { setOpen(true); setSelectedId(item.id); }} className="text-white font-bold bg-red-600 hover:bg-red-700 rounded-full px-3 py-2">
                           <FontAwesomeIcon icon={faTrash} beat />
+                        </button>
+                        <button onClick={() => hiddenIds.includes(item.id) ? handleUnhide(item.id) : handleHide(item.id)} className="text-white font-bold bg-black rounded-full px-3 py-2">
+                          {hiddenIds.includes(item.id) ? <FontAwesomeIcon icon={faEye} beat /> : <FontAwesomeIcon icon={faEyeSlash} beat />}
                         </button>
                       </div>
                     </td>
@@ -100,7 +130,7 @@ function Keys() {
                         <p className="text-sm text-gray-500">Esta acción es irreversible</p>
                       </div>
                       <div className="flex gap-4">
-                        <button onClick={() => {handleDelete(selectedId);setOpen(false)}} className="w-full bg-red-500 shadow-red-400/40 text-white flex gap-2 items-center justify-center py-2 px-4 font-semibold shadow-md rounded-xl">Eliminar</button>
+                        <button onClick={() => { handleDelete(selectedId); setOpen(false); }} className="w-full bg-red-500 shadow-red-400/40 text-white flex gap-2 items-center justify-center py-2 px-4 font-semibold shadow-md rounded-xl">Eliminar</button>
                         <button className="w-full border bg-white flex gap-2 items-center justify-center py-2 px-4 font-semibold shadow-md rounded-xl" onClick={() => setOpen(false)}>Volver</button>
                       </div>
                     </div>

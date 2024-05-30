@@ -17,4 +17,8 @@ export class CreateKeyDto {
     @IsInt()
     @IsNotEmpty()
     ai_id: number;
+    
+    @IsInt()
+    @IsNotEmpty()
+    user_id: number;
 }

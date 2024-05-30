@@ -1,28 +1,70 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { useAuth } from "../auth/authProvider";
+import Toastify from "toastify-js";
+import "toastify-js/src/toastify.css";
 
 function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const user = useAuth();
+  const navigate = useNavigate();
 
   const handleSubmit = async (event) => {
     event.preventDefault();
     console.log(email, password);
-    /*
+
+
     try {
-      const response = await fetch("http://localhost:3333/login", {
+      // Request login
+      const response = await fetch("http://localhost:3333/auth/signin", {
         method: "POST",
         headers: {
-          "Content-Type": "application/json"
+          "Content-Type": "application/json",
         },
-        body: JSON.stringify({ email, password })
+        body: JSON.stringify({ email: email, password: password }),
       });
-      const data = await response.json();
-      console.log(data);
-    } catch (error) {
-      console.error(error);
+      const res = await response.json();
+      console.log(res);
+
+      if (response.status === 200) {
+        // Successful login
+        user.loginAction(res);
+        Toastify({
+          text: "Inicio de sesión exitoso.",
+          duration: 3000,
+          close: true,
+          style: {
+            background: "green",
+          },
+        }).showToast();
+        navigate("/loggedin");
+      } else {
+        // Error
+        Toastify({
+          text: `Error: ${res.message}`,
+          duration: 3000,
+          close: true,
+          style: {
+            background: "red",
+            text: "white",
+          },
+        }).showToast();
+      }
+    } catch (error) { //Por algún motivo no cae aquí
+      // Error
+      console.log(error);
+      Toastify({
+        text: `Error: ${error.message}`,
+        duration: 3000,
+        close: true,
+        style: {
+          background: "red",
+          text: "white",
+        },
+      }).showToast();
     }
-    */
+
   };
 
   return (

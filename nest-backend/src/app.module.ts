@@ -9,7 +9,6 @@ import { ResultModule } from './result/result.module';
 import { MethodsModule } from './methods/methods.module';
 import { UserModule } from './user/user.module';
 import { AuthModule } from './auth/auth.module';
-import { BetaModule } from './beta/beta.module';
 import { TagModule } from './tag/tag.module';
 
 global.ReadableStream = require('web-streams-polyfill').ReadableStream;
@@ -28,7 +27,6 @@ global.ReadableStream = require('web-streams-polyfill').ReadableStream;
     MethodsModule,
     UserModule,
     AuthModule,
-    BetaModule,
     TagModule,
   ],
 })

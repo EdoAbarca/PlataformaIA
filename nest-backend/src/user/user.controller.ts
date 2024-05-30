@@ -1,7 +1,8 @@
 import {
     Controller,
     Get,
-    UseGuards,
+    Param,
+    //UseGuards,
 } from '@nestjs/common';
 import { User } from '@prisma/client';
 import { GetUser } from '../auth/decorator';
@@ -20,8 +21,8 @@ export class UserController {
 
     /*
     @Patch()
-    changePassword(@Body() password: string) {
-        return this.userService.changePassword(password);
+    changePassword(@Body() body: any) {
+        return this.userService.changePassword(body.id, body.password);
     }
     */
 }

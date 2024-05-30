@@ -1,5 +1,6 @@
 import homeImg from "../assets/images/homeImg.png";
 import { Link } from "react-router-dom";
+import Navbar from "../components/Navbar";
 
 function Home() {
   /*
@@ -77,6 +78,7 @@ function Home() {
   */
   return (
     <div>
+      <Navbar/>
       <div className="relative flex flex-col py-16 lg:pt-0 lg:flex-col lg:pb-0">
         <div className="border-y border-r-2 flex flex-col items-start w-full max-w-xl px-4 mx-auto lg:px-8 lg:max-w-screen-xl">
           <div className="mb-16 lg:my-40 lg:max-w-lg lg:pr-5">
@@ -87,14 +89,14 @@ function Home() {
                 </p>
               </div>
               <h2 className="max-w-lg mb-6 font-sans text-4xl font-bold tracking-tight text-gray-900 sm:text-4xl sm:leading-none">
-                Un uso indeseado de las IAs, resuelto con IAs
+                La destreza de los LLMs no debe permitir deshonestidad
               </h2>
               <p className="text-base text-justify text-gray-700 md:text-lg">
-                PoC AI Detector nace como prueba de concepto de un integrador múltiple de detectores de inteligencia artificial, cuyo principal objetivo es identificar si estas se utilizaron para generar el texto analizado.
+                PoC AI Detector nace como prueba de concepto de un integrador múltiple de detectores de texto generados por inteligencia artificial, cuyo principal objetivo es identificar si estas se utilizaron para generar el texto analizado.
               </p>
             </div>
             <div className="flex flex-col items-center md:flex-row">
-              <Link to="/signin" className="inline-flex items-center justify-center w-full h-12 px-6 mb-3 font-medium tracking-wide text-white transition duration-500 rounded-2xl shadow-md md:w-auto md:mr-4 md:mb-0 bg-sky-300 hover:bg-sky-500 focus:shadow-outline focus:outline-none">
+              <Link to="/login" className="inline-flex items-center justify-center w-full h-12 px-6 mb-3 font-medium tracking-wide text-white transition duration-500 rounded-2xl shadow-md md:w-auto md:mr-4 md:mb-0 bg-sky-300 hover:bg-sky-500 focus:shadow-outline focus:outline-none">
                 Entrar ahora
               </Link>
               <Link to="/faq" className="inline-flex items-center justify-center w-full h-12 px-6 mb-3 font-medium tracking-wide text-white transition duration-500 rounded-2xl shadow-md md:w-auto md:mr-4 md:mb-0 bg-sky-300 hover:bg-sky-500 focus:shadow-outline focus:outline-none">
@@ -117,10 +119,10 @@ function Home() {
             <div className="flex flex-col justify-center space-y-8 text-center">
               <div className="space-y-2">
                 <h1 className="text-3xl font-bold tracking-tighter sm:text-5xl xl:text-6xl/none bg-clip-text text-transparent bg-gradient-to-r from-white to-gray-500">
-                  El uso de IAs para resolver evaluaciones es un problema creciente
+                  El uso de IAs en situaciones académicas es un problema creciente
                 </h1>
                 <p className="max-w-[720px] text-zinc-200 md:text-xl dark:text-zinc-100 mx-auto p-10">
-                  Este servicio no pretende ser un sustituto de tu criterio, pero sí una herramienta de referencia que te ayudará a detectar posibles casos de engaño.
+                  Este servicio no es un sustituto de su criterio, pero sí una herramienta de referencia que ayudará a detectar posibles casos de engaño.
                 </p>
               </div>
               <div className="w-full max-w-full space-y-4 mx-auto">

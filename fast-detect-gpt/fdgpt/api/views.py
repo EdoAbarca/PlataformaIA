@@ -20,26 +20,25 @@ class FastDetectGPTView(APIView):
       result = subprocess.run(parameters, capture_output=True, text=True)
 
       if result.returncode == 0:
-        # Split the stdout into lines
-        output_lines = result.stdout.strip().split('\n')
+        # Split the output into lines and get the last line
+        output_lines = result.stdout.splitlines()
 
-        # Extract the last line
-        last_line = output_lines[-1]
+        # Extract the last element
+        last_element = output_lines[-1]
 
-        # Assuming the last line contains a JSON string, parse it
-        print(last_line)
-        output_dict = json.loads(last_line)
+        # Parse the JSON string into a Python dictionary
+        output_dict = json.loads(last_element)
 
         # Now you can use output_dict as a regular Python dictionary
         print("Output from infer.py:", output_dict)
-        return Response(output_dict, status=status.HTTP_200_OK)
+        return Response(output_dict,status=status.HTTP_200_OK)
       else:
         #print("Error running infer.py. Return code:", result.returncode)
         #print(result)
         return Response({"Code":result.returncode, "Stderr": "Error running infer.py. Error: "+result.stderr, "Stdout":result.stdout}, status=status.HTTP_400_BAD_REQUEST)
       
     except Exception as e:
-      return Response("Exception: ",str(e),status=status.HTTP_400_BAD_REQUEST)
+      return Response("Exception: "+str(e),status=status.HTTP_400_BAD_REQUEST)
     
   def get(self, request):
     try:

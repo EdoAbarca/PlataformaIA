@@ -2,8 +2,14 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faHouse, faCircleUser } from '@fortawesome/free-solid-svg-icons';
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
-function Navbar() {
+//Temporal
+import Toastify from "toastify-js";
+import "toastify-js/src/toastify.css";
+
+
+function Navbar({ user }) {
   const [isOpen, setIsOpen] = useState(false);
+  console.log(user);
 
   return (
     <nav className="flex items-center justify-between flex-wrap p-6 bg-black">
@@ -26,23 +32,29 @@ function Navbar() {
         className={`w-full block flex-grow lg:flex lg:items-center lg:w-auto ${isOpen ? "block" : "hidden"}`}
       >
         <div className="text-sm lg:flex-grow">
-          <Link to="/" className="block text-lg mt-4 lg:inline-block lg:mt-0 font-bold mr-4 transition ease-in-out duration-500 hover:text-white">
+          {!user? (<Link to="/" className="block text-lg mt-4 lg:inline-block lg:mt-0 font-bold mr-4 transition ease-in-out duration-500 hover:text-white">
             Home <FontAwesomeIcon icon={faHouse} fade className='text-white'/>
-          </Link>
-          <Link to="/register" className="block mt-4 lg:inline-block lg:mt-0 text-white font-semibold mr-4">
-            Register
-          </Link>
-          <Link to="/login" className="block mt-4 lg:inline-block lg:mt-0 text-white font-semibold mr-4">
-            Login
-          </Link>
-          <Link to="/loggedin" className="block mt-4 lg:inline-block lg:mt-0 text-white font-semibold mr-4">
-            After login
-          </Link>
+          </Link>) : (<Link to="/loggedin" className="block text-lg mt-4 lg:inline-block lg:mt-0 font-bold mr-4 transition ease-in-out duration-500 hover:text-white">
+            Home <FontAwesomeIcon icon={faHouse} fade className='text-white'/>
+          </Link>) }
           <Link to="/faq" className="block mt-4 lg:inline-block lg:mt-0 text-white font-semibold mr-4">
             FAQ
           </Link>
+
+            {!user && (
+              <>
+                <Link to="/register" className="block mt-4 lg:inline-block lg:mt-0 text-white font-semibold mr-4">
+                  Register
+                </Link>
+                <Link to="/login" className="block mt-4 lg:inline-block lg:mt-0 text-white font-semibold mr-4">
+                  Login
+                </Link>
+              </>
+            )}
+      
+          
         </div>
-        <div className="relative">
+        {user && <div className="relative">
           <button
             onClick={() => setIsOpen(!isOpen)}
             className="flex items-center justify-center h-10 w-10 rounded-full bg-gray-300 hover:bg-gray-400 focus:outline-none focus:shadow-outline"
@@ -57,26 +69,21 @@ function Navbar() {
               <p
                 className="block px-4 py-2 text-gray-800"
               >
-                Username
+                {`${user.user}`}
               </p>
               <p
                 className="block px-4 py-2 text-gray-800"
               >
-                Email
-              </p>
-              <p
-                className="block px-4 py-2 text-gray-800"
-              >
-                Role
+                {`${user.userMail}`}
               </p>
               <p
                 className="block px-4 py-2 text-gray-800 hover:bg-red-500 hover:text-white"
               >
-                Sign out
+                <button onClick={user.logOut}>Cerrar sesión</button>
               </p>
             </div>
           )}
-        </div>
+        </div>}
       </div>
     </nav>
   );

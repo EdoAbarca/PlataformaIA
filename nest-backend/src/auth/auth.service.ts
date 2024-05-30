@@ -21,12 +21,16 @@ export class AuthService {
     // generate the password hash
     const hash = await argon.hash(dto.password);
     // save the new user in the db
+    const currentTime = new Date();
+    const formattedDate = `${currentTime.getDate()}/${currentTime.getMonth() + 1}/${currentTime.getFullYear()}`;
     try {
       const user = await this.prisma.user.create({
         data: {
           username: dto.username,
           email: dto.email,
           password: hash,
+          created: formattedDate,
+          //createdTime: currentTime,
         },
       });
 
@@ -60,7 +64,7 @@ export class AuthService {
       throw new ForbiddenException(
         'Usuario no encontrado',
       );
-
+    console.log(user.password, dto.password);
     // compare password
     const pwMatches = await argon.verify(
       user.password,
@@ -78,7 +82,7 @@ export class AuthService {
     userId: number,
     email: string,
   ):
-    Promise<{ access_token: string, refresh_token: string }> {
+    Promise<{ user: any, access_token: string, refresh_token: string }> {
     const payload = {
       sub: userId,
       email,
@@ -100,8 +104,14 @@ export class AuthService {
         secret: secret,
       },
     );
-
+    const user = await this.prisma.user.findUnique({ where: { id: userId } });
+    const userReturn = {
+      id: user.id,
+      username: user.username,
+      email: user.email,
+    }
     return {
+      user: userReturn,
       access_token: accessToken,
       refresh_token: refreshToken,
     };

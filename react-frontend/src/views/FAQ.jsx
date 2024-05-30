@@ -1,8 +1,11 @@
 import { useNavigate } from "react-router-dom";
-//Al ultimo
+import Navbar from "../components/Navbar";
+
 export default function FAQ() {
   const navigate = useNavigate();
   return (
+    <>
+    <Navbar />
     <div
       className="relative w-full bg-white px-6 pt-10 pb-8 my-8 shadow-xl ring-1 ring-gray-900/5 sm:mx-auto sm:max-w-2xl sm:rounded-lg sm:px-10">
       <div className="mx-auto px-5">
@@ -109,5 +112,6 @@ export default function FAQ() {
         </div>
       </div>
     </div>
+    </>
   )
 }

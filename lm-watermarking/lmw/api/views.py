@@ -25,18 +25,15 @@ class LmWatermarkingView(APIView):
       print("[views.py] Stdout: ", result.stdout)
       print("[views.py] Stderr: ", result.stderr)
       if result.returncode == 0:
-        # Split the stdout into lines
-        output_lines = result.stdout.strip().split('\n')
+        # Split the output into lines and get the last line
+        output_lines = result.stdout.splitlines()
 
-        # Extract the last line
-        last_line = output_lines[-1]
-
-        # Assuming the last line contains a JSON string, parse it
-        output_dict = json.loads(last_line)
+        # Extract the last element
+        last_element = output_lines[-1]
 
         # Now you can use output_dict as a regular Python dictionary
-        print("Output from infer.py:", output_dict)
-        return Response(output_dict,status=status.HTTP_200_OK)
+        print("Output from infer.py:", last_element)
+        return Response(last_element,status=status.HTTP_200_OK)
 
       else:
         #print("Error running infer.py. Return code:", result.returncode)

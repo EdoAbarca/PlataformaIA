@@ -63,9 +63,9 @@ services:
             - driver: nvidia
               count: 1
               capabilities: [gpu]
-  #finetuned-debertav3: #en duda
-  #  image: docker.io/eddindocker/finetuned-debertav3
-  #  container_name: finetuned-debertav3
+  #finetuned-bert: #en duda
+  #  image: docker.io/eddindocker/finetuned-bert
+  #  container_name: finetuned-bert
   #  ports:
   #    - "8003:8003"
   #  networks:

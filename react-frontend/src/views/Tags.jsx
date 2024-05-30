@@ -4,16 +4,21 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrash, faTrashCan } from "@fortawesome/free-solid-svg-icons";
 import HoverText from "../components/HoverText";
 import Modal from "../components/Modal.jsx";
+import Navbar from "../components/Navbar.jsx";
+import Toastify from "toastify-js";
+import "toastify-js/src/toastify.css";
+import { useAuth } from "../auth/authProvider.jsx";
 
 function Tags() {
   const [tags, setTags] = useState(null);
   const [open, setOpen] = useState(false);
   const [selectedId, setSelectedId] = useState(null);
+  const user = useAuth();
 
   useEffect(() => {
     async function fetchTags() {
       try {
-        const response = await fetch("http://localhost:3333/beta/final/tag");
+        const response = await fetch(`http://localhost:3333/api/final/tag/user/${user.idUser}`);
         const data = await response.json();
         setTags(data);
         console.log(data);
@@ -27,17 +32,36 @@ function Tags() {
 
   async function handleDelete(id) {
     try {
-      await fetch(`http://localhost:3333/beta/final/tag/${id}`, {
+      await fetch(`http://localhost:3333/api/final/tag/${id}`, {
         method: "DELETE",
       });
       setTags(tags.filter((item) => item.id !== id));
+      Toastify({
+        text: "Categoría eliminada.",
+        duration: 3000,
+        close: true,
+        style: {
+          background: "blue",
+          text: "white",
+        },
+      }).showToast();
     } catch (error) {
       console.log(error);
+      Toastify({
+        text: "Error al eliminar la categoría: " + error.message,
+        duration: 3000,
+        close: true,
+        style: {
+          background: "red",
+          text: "white",
+        },
+      }).showToast();
     }
   }
 
   return (
     <>
+      <Navbar user={user}/>
       <div className="w-full sm:px-6">
         <div className="bg-white px-4 py-4 md:px-8 md:py-7 xl:px-10">
           <div className="flex items-center">

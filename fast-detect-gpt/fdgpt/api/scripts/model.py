@@ -33,19 +33,19 @@ def get_model(model_name, kwargs, cache_dir):
         if config_found:
             #return AutoModelForCausalLM.from_pretrained(model_path, **kwargs)
             print("[model.py] (get_model) Cargando modelo...")
-            model = AutoModelForCausalLM.from_pretrained(model_path, torch_dtype=torch.float16, device_map='auto', low_cpu_mem_usage=True, offload_folder="offload", offload_state_dict=True)
+            model = AutoModelForCausalLM.from_pretrained(model_path, cache_dir=cache_dir, torch_dtype=torch.float16, device_map='auto', offload_folder="offload", offload_state_dict=True)
             print("[model.py] (get_model) Modelo cargado: ", model)
             return model
         else:
             print(f"[model.py] (get_model) Model '{model_name}' no encontrado")
             print("[model.py] (get_model) Cargando modelo desde Hugging Face...")
-            model = AutoModelForCausalLM.from_pretrained(model_name, cache_dir=cache_dir, torch_dtype = torch.float16, device_map='auto', low_cpu_mem_usage=True, offload_folder="offload", offload_state_dict=True) #Falla, integrar en un try-catch, ejecutar con ruta local despues de la falla (modelo ya estará descargado en caché local)
+            model = AutoModelForCausalLM.from_pretrained(model_name, cache_dir=cache_dir, torch_dtype=torch.float16, device_map='auto', offload_folder="offload", offload_state_dict=True)
             print("[model.py] (get_model) Modelo cargado: ", model)
             return model
     else:
         print("[model.py] (get_model) Ruta local no existe")
         print("[model.py] (get_model) Cargando modelo desde Hugging Face...")
-        model = AutoModelForCausalLM.from_pretrained(model_name, cache_dir=cache_dir, torch_dtype=torch.float16, device_map='auto', low_cpu_mem_usage=True, offload_folder="offload", offload_state_dict=True) #Falla, integrar en un try-catch, ejecutar con ruta local despues de la falla (modelo ya estará descargado en caché local)
+        model = AutoModelForCausalLM.from_pretrained(model_name, cache_dir=cache_dir, torch_dtype=torch.float16, device_map='auto', offload_folder="offload", offload_state_dict=True)
         print("[model.py] (get_model) Modelo cargado: ", model)
         return model
 
@@ -105,10 +105,10 @@ def load_model(model_name, device, cache_dir):
     model_kwargs.update(dict(low_cpu_mem_usage=True))
     model = get_model(model_fullname, model_kwargs, cache_dir)
     print("[model.py] (load_model.py) modelo cargado. Modelo: ", model)
-    print('[model.py] (load_model.py) Moving model to GPU...', end='', flush=True)
-    start = time.time()
-    model.to(device)
-    print(f'[model.py] (load_model.py) DONE ({time.time() - start:.2f}s)')
+    #print('[model.py] (load_model.py) Moving model to GPU...', end='', flush=True)
+    #start = time.time()
+    #model.to(device)
+    #print(f'[model.py] (load_model.py) DONE ({time.time() - start:.2f}s)')
     return model
 
 def load_tokenizer(model_name, for_dataset, cache_dir):
